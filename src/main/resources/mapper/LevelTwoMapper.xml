@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.inrich.dao.LevelTwoDAO">
+	
+	<sql id="table">level_two</sql>
+    <sql id="selectFields">id,question,level,is_base</sql>
+	
+	<select id="selectLevelTwoById" resultType="LevelTwo" >
+		select * from 
+			<include refid="table"/>
+		where id=#{id}
+	</select>
+	
+	
+	<select id="selectLevelTwoByPid" resultType="map" >
+		select 
+		<include refid="selectFields"/>
+		from 
+		<include refid="table"/>
+		where parent_id=#{parentId}
+	</select>
+	
+	
+	<select id="selectIndex" resultType="LevelTwo">
+		select * from 
+		<include refid="table"/>
+		where parent_id=0
+	</select>
+	
+	
+	
+	
+</mapper>
