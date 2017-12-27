@@ -1,0 +1,27 @@
+body{overflow-x: hidden;background: #f9f9f9;font-size: 13px;}
+.header{height: 59px; border-bottom: 1px solid #404553;;  background-color: #393D49;position: fixed;top: 0;width: 100%;padding: 0 15%;color: #fff;line-height: 59px;}
+
+.header .layui-nav{float: right;margin-right: 15%;cursor: pointer;}
+.header .layui-nav .layui-nav-item{margin:0 20px;}
+.logo{text-align: center;padding-top: 120px;}
+.content{background: #f9f9f9;padding: 0px 15%;z-index: 9;}
+.content .layui-form{padding: 30px 30% 15px;}
+.layui-form .layui-input{border-radius: 20px;text-align: center;}
+.content .selectMark{text-align: center;color: #333;}
+#gather{margin: 50px 0;}
+#gather>.layui-col-md3>.Tcontent{background: #fff;border-radius: 3px;line-height: 30px;padding: 15px 0 0;position: relative;}
+#gather>.layui-col-md3>.Tcontent .survey{position: relative;min-height: 120px;}
+#gather>.layui-col-md3>.Tcontent .Tmask{position: absolute;left: 0;top: 0;width: 100%;height: 100%;background:#FFF;z-index: -1;text-align: center;border-radius: 3px;}
+#gather>.layui-col-md3>.Tcontent:hover .Tmask{z-index: 1;}
+#gather>.layui-col-md3>.Tcontent:hover .Tmask .iconfont{color: #007DDB;}
+#gather>.layui-col-md3>.Tcontent h3{font-size: 20px;color: #FF5722;text-align: center;}
+#gather>.layui-col-md3>.Tcontent h4{text-align: center;}
+#gather>.layui-col-md3>.Tcontent p span:first-child{display: inline-block;width: 50%;text-align: right;}
+#gather>.layui-col-md3>.Tcontent p span{display: inline-block;width: 50%;float: left;}
+.filtr-item{cursor: pointer;}
+
+#tuozhuai{position: fixed;top: 50%;right: 0;width: 35px;height: 120px;text-align: center;line-height: 20px;padding: 10px 0;}
+
+
+
+

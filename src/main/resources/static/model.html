@@ -1,0 +1,201 @@
+<!DOCTYPE html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<script src="layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/move.js"></script>
+<script src="js/data.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<style type="text/css">
+	#gather{width: 1200px;position: relative;background: #fff;}
+	#gather>div>.Tcontent{background: #393D49 !important;color: #fff;}
+	#gather>div>.Tcontent>h3{color: #01AAED !important;}
+</style>
+<body>
+<div id="gather" class="layui-row layui-col-space15">
+				
+</div>
+
+
+</body>
+</html>
+	<script id="demo" type="text/html">
+	  {{#  layui.each(d, function(index, item){ }}
+	    <div class="layui-col-md3 filtr-item" data-num={{item.num}}>
+	    	<div class="Tcontent">	
+	    	  <h4><span class= {{item.icon}}></span></h4>
+	    	  <h3>{{ item.name}}</h3>
+	    	  <div class="survey">
+	    	  	  <p class="layui-clear"><span>使用网段：</span><span>{{item.net}}</span></p>
+			      <p class="layui-clear" style="line-height: 24px;"><span>使用部门：</span><span>{{item.user}}</span></p>
+			      <p class="layui-clear"><span>系统架构：</span><span>{{item.system}}</span></p>
+
+	    	  </div>
+		      
+	    	</div>
+	        
+	    </div>
+	  {{#  }); }}
+
+	</script>
+<script>
+	layui.use(['element','layer','laytpl'],function(){
+	var $=layui.$,laytpl=layui.laytpl,form=layui.form;
+		
+	var getTpl = demo.innerHTML
+			,view = document.getElementById('gather');
+			laytpl(getTpl).render(data, function(html){
+			  view.innerHTML = html;
+			 
+			});
+		
+		
+		
+		
+		
+		
+	$(".filtr-item>.Tcontent>h4>span").addClass( "iconfont").css({"font-size":"36px","color":"#FF5722"})
+
+
+
+	var oUl= $("#gather");
+	
+		
+		
+		
+		var aLi = $("#gather>div");
+		var disX = 0;
+		var disY = 0;
+		var minZindex = 1;
+		var aPos =[];
+		for(var i=0;i<aLi.length;i++){
+			var t = aLi[i].offsetTop;
+			var l = aLi[i].offsetLeft;
+			aLi[i].style.top = t+"px";
+			aLi[i].style.left = l+"px";
+			aPos[i] = {left:l,top:t};
+			aLi[i].index = i;
+		}
+		for(var i=0;i<aLi.length;i++){
+			aLi[i].style.position = "absolute";
+			aLi[i].style.margin = 0;
+			setDrag(aLi[i],i);
+		}
+		//拖拽
+		function setDrag(obj,iiii){
+			obj.onmouseover = function(){
+				obj.style.cursor = "move";
+			}
+			obj.onmousedown = function(event){
+				var scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
+				var scrollLeft = document.documentElement.scrollLeft||document.body.scrollLeft;
+				obj.style.zIndex = minZindex++;
+				
+				//当鼠标按下时计算鼠标与拖拽对象的距离
+				disX = event.clientX +scrollLeft-obj.offsetLeft;
+				disY = event.clientY +scrollTop-obj.offsetTop;
+				document.onmousemove=function(event){
+					//当鼠标拖动时计算div的位置
+					var l = event.clientX -disX +scrollLeft;
+					var t = event.clientY -disY + scrollTop;
+					obj.style.left = l + "px";
+					obj.style.top = t + "px";
+
+					var oNear = findMin(obj);
+
+				}
+				document.onmouseup = function(){
+					document.onmousemove = null;//当鼠标弹起时移出移动事件
+					document.onmouseup = null;//移出up事件，清空内存
+					//检测是否普碰上，在交换位置
+					var oNear = findMin(obj);
+					if(oNear){
+//						oNear.className = "";
+						oNear.style.zIndex = minZindex++;
+						obj.style.zIndex = minZindex++;
+						startMove(oNear,aPos[obj.index]);
+						startMove(obj,aPos[oNear.index]);
+						var Tstartnum = obj.getAttribute("data-num");
+						var Tendnum =oNear.getAttribute("data-num");
+						obj.setAttribute("data-num",Tendnum)
+						oNear.setAttribute("data-num",Tstartnum)
+						console.log(Tstartnum,Tendnum)
+						console.log(obj.getAttribute("data-num"),oNear.getAttribute("data-num"))
+					
+						//交换index
+						oNear.index += obj.index;
+						obj.index = oNear.index - obj.index;
+						oNear.index = oNear.index - obj.index;
+						
+						
+						
+						var Tnum = [];
+						for (var i =0;i<$("#gather>div").length;i++) {
+							
+							Tnum.push($("#gather>div").eq(i).attr("data-num"))
+						}
+						console.log(Tnum)
+						$.cookie("TZnums",Tnum,{ expires: 365})
+						
+						console.log($.cookie("TZnums"))
+					}else{
+						startMove(obj,aPos[obj.index]);
+					}
+					
+				}
+				clearInterval(obj.timer);
+				return false;//低版本出现禁止符号
+			}
+		}
+		//碰撞检测
+		function colTest(obj1,obj2){
+			var t1 = obj1.offsetTop;
+			var r1 = obj1.offsetWidth+obj1.offsetLeft;
+			var b1 = obj1.offsetHeight+obj1.offsetTop;
+			var l1 = obj1.offsetLeft;
+
+			var t2 = obj2.offsetTop;
+			var r2 = obj2.offsetWidth+obj2.offsetLeft;
+			var b2 = obj2.offsetHeight+obj2.offsetTop;
+			var l2 = obj2.offsetLeft;
+
+			if(t1>b2||r1<l2||b1<t2||l1>r2){
+				return false;
+			}else{
+				return true;
+			}
+		}
+		//勾股定理求距离
+		function getDis(obj1,obj2){
+			var a = obj1.offsetLeft-obj2.offsetLeft;
+			var b = obj1.offsetTop-obj2.offsetTop;
+			return Math.sqrt(Math.pow(a,2)+Math.pow(b,2));
+		}
+		//找到距离最近的
+		function findMin(obj){
+			var minDis = 999999999;
+			var minIndex = -1;
+			for(var i=0;i<aLi.length;i++){
+				if(obj==aLi[i])continue;
+				if(colTest(obj,aLi[i])){
+					var dis = getDis(obj,aLi[i]);
+					if(dis<minDis){
+						minDis = dis;
+						minIndex = i;
+					}
+				}
+			}
+			if(minIndex==-1){
+				return null;
+			}else{
+				return aLi[minIndex];
+			}
+		}	
+	})
+	
+</script>
