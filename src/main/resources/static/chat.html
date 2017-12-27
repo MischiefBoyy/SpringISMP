@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+		<style type="text/css">
+			body{background: #f6f6f6;font-size: 12px;}
+			h3{background: #000;text-align: center;color: #fff;height: 30px;line-height: 30px;}
+			.layui-form{width: 400px;margin: 20px auto;border: 1px solid #009E94;background: #fff;}
+			.bar{border-top: 1px solid #009688;}
+			.aoeBOX{height: 250px;overflow-y: auto;position: relative;}
+			.aoeBOX::-webkit-scrollbar {width: 10px;height: 4px;background-color: #F5F5F5;}
+		    .aoeBOX::-webkit-scrollbar-thumb {background-color:#009F95;} 
+		    .aoe{position: absolute;left: 0;top: 0;width: 100%;padding-bottom: 10px;}
+			.textarea{border: none;resize: none;line-height: 16px;padding-top: 0;width: 376px;padding: 0 9px 6px;}
+			.textarea::-webkit-scrollbar {width: 10px;height: 4px;background-color: #F5F5F5;}
+		    .textarea::-webkit-scrollbar-thumb {background-color:#009F95;} 
+			#chatsBtn{border: none;color: #009E94;float:right ;line-height: 20px;height: 20px;}
+			#send{border: none;color: #fff;float:right ;line-height: 24px;height: 24px;padding: 0 20px;margin: 0 8px 8px;}
+			.in-rich{margin-top: 10px;}
+			.in-rich .img_box{float: left;width: 50px;height: 50px;}
+			.in-rich .text_box{float: left;margin-left: 10px;width: 300px;}
+			.in-rich .text_box .text_title{font-size: 10px;color: #999;width: 100%;}
+			.in-rich .text_box .text_title span:first-of-type{margin-right: 20px;}
+			.in-rich .text_box .text-content{border-radius: 3px;margin-top: 5px;float: left;padding: 8px;max-width: 300px;position: relative;background: #e2e2e2;}
+			.in-rich .text_box .text-content:after {
+			    content: '';
+			    position: absolute;
+			    left: -10px;
+			    top: 13px;
+			    width: 0;
+			    height: 0;
+			    border-style: solid dashed dashed;
+			    border-color: #e2e2e2 transparent transparent;
+			    overflow: hidden;
+			    border-width: 10px;
+			}
+			.user{margin-top: 10px;}
+			.user .img_box{float: right;width: 40px;height: 50px;text-align: center;line-height: 60px;padding-left: 10px;}
+			.user .text_box{float: right;margin-left: 10px;width: 300px;text-align: right;}
+			.user .text_box .text_title{font-size: 10px;color: #999;width: 100%;}
+			.user .text_box .text_title span:first-of-type{margin-right: 20px;}
+			.user .text_box .text-content{border-radius: 3px;margin-top: 5px;float: right;padding: 8px;max-width: 300px;position: relative;background: #5FB878;color: #fff;text-align: left;}
+			.user .text_box .text-content:after {
+			    content: '';
+			    position: absolute;
+			    right: -10px;
+			    top: 13px;
+			    width: 0;
+			    height: 0;
+			    border-style: solid dashed dashed;
+			    border-color: #5FB878 transparent transparent;
+			    overflow: hidden;
+			    border-width: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layui-form">
+			<h3>常见问题咨询</h3>
+			<div class="aoeBOX">
+				<div class="aoe">
+					<div class="in-rich layui-clear">
+						<div class="img_box">
+							<img src="img/wxLogo.jpg" width="100%"/>
+						</div>
+						<div class="text_box">
+							<p class="text_title layui-clear"><span>财安金融</span><span>2017-12-15 10:02:44</span></p>
+							<p class="text-content">
+								财安金融
+							</p>
+						</div>
+					</div>
+					<div class="user layui-clear">
+						<div class="img_box">
+							<img src="img/user.jpg" width="85%"/>
+						</div>
+						<div class="text_box">
+							<p class="text_title layui-clear"><span>2017-12-15 10:02:44</span><span>我</span></p>
+							<p class="text-content">
+								财安金融介绍
+							</p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="bar layui-clear">
+				<button class="layui-btn layui-btn-sm layui-btn-primary" id="chatsBtn"><i class="layui-icon">&#xe60e;</i>咨询记录</button>
+			</div>
+			<textarea name="" rows="4" required    placeholder="请输入" class="textarea" id="textarea" ></textarea>
+			<div class="footer layui-clear">
+				<button class="layui-btn layui-btn-sm" id="send">发送</button>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use('element',function(){
+			var $= layui.$;
+			$("#textarea").focus(function(){
+				$("#send").off().on('click',send1)
+				
+			})
+			
+			$.ajax({
+				type:"get",
+				url:"js/chatdata.json",
+				async:true,
+				success:function(res){
+					console.log(res)
+				}
+			});
+			
+			
+		})
+		function send1(){
+			if ($("#textarea").val()) {
+				$(".aoe").append('<div class="user layui-clear">'+
+					'<div class="img_box">'+
+						'<img src="img/user.jpg" width="85%"/>'+
+					'</div>'+
+					'<div class="text_box">'+
+						'<p class="text_title layui-clear"><span>'+getNowFormatDate()+'</span><span>我</span></p>'+
+						'<p class="text-content">'+
+							$("#textarea").val()
+						+'</p>'+
+					'</div>'+
+				'</div>')
+				$("#textarea").val("")
+				if ($(".aoe").height()-250>0) {
+					$(".aoeBOX").scrollTop($(".aoe").height()-238)
+				}
+				
+				
+			}else{
+				layer.msg("您尚未输入内容")
+				$("#textarea").focus()
+			}
+		}
+		//时间
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+    return currentdate;
+}
+	</script>
+</html>
