@@ -12,7 +12,7 @@ public class QaController {
 	@Autowired
 	private QaService qaService;
 	
-	@RequestMapping("/index")
+	@RequestMapping("/sy")
 	public String index() {
 		return qaService.getIndex();
 	}
