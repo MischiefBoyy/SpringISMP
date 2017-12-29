@@ -4,6 +4,15 @@
 	
 	<sql id="table">level_two</sql>
     <sql id="selectFields">id,question,level,is_base as isBase</sql>
+    <sql id="insertFields">
+    	level,
+    	question,
+    	key_word,
+    	click_num,
+    	answer,
+    	parent_id,
+    	is_base
+   	</sql>
 	
 	<select id="selectLevelTwoById" resultType="LevelTwo" >
 		select * from 
@@ -26,6 +35,13 @@
 		<include refid="table"/>
 		where parent_id=0
 	</select>
+	
+	<insert id="addLevelTwo" parameterType="LevelTwo" useGeneratedKeys="true" keyProperty="id">
+		insert into 
+		 <include refid="table"/>
+			(<include refid="insertFields"/>) 
+			values(#{level}, #{question},#{keyWord},#{clickNum},#{answer},#{parentId},#{isBase})
+	</insert> 
 	
 	
 	

@@ -14,6 +14,8 @@ public interface LevelTwoDAO {
 	
 	List<LevelTwo> selectIndex();
 	
+	int addLevelTwo(LevelTwo LevelTwo);
+	
 	
 	
 }

@@ -4,7 +4,7 @@ public class LevelTwo extends LevelOne {
 	private int parentId;
 	private String answer;
 
-	public int getParentId() {
+	public int getParentId() { 
 		return parentId;
 	}
 
