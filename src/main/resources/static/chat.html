@@ -7,7 +7,7 @@
 		<style type="text/css">
 			body{background: #f6f6f6;font-size: 12px;}
 			
-			.layui-form{width: 400px;margin: 5px auto 0;border: 1px solid #009E94;background: #fff;}
+			.layui-form{width: 600px;margin: 5px auto 0;border: 1px solid #009E94;background: #fff;padding-left: 1px;}
 			.bar{border-top: 1px solid #009688;}
 			.aoeBOX{height: 250px;overflow-y: auto;position: relative;}
 			.aoeBOX::-webkit-scrollbar {width: 10px;height: 4px;background-color: #F5F5F5;}
@@ -54,6 +54,8 @@
 			    overflow: hidden;
 			    border-width: 10px;
 			}
+			
+			.list{color: #007DDB;}
 		</style>
 	</head>
 	<body>
@@ -61,28 +63,8 @@
 			
 			<div class="aoeBOX">
 				<div class="aoe">
-					<div class="in-rich layui-clear">
-						<div class="img_box">
-							<img src="img/wxLogo.jpg" width="100%"/>
-						</div>
-						<div class="text_box">
-							<p class="text_title layui-clear"><span>财安金融</span><span>2017-12-15 10:02:44</span></p>
-							<p class="text-content">
-								财安金融
-							</p>
-						</div>
-					</div>
-					<div class="user layui-clear">
-						<div class="img_box">
-							<img src="img/user.jpg" width="85%"/>
-						</div>
-						<div class="text_box">
-							<p class="text_title layui-clear"><span>2017-12-15 10:02:44</span><span>我</span></p>
-							<p class="text-content">
-								财安金融介绍
-							</p>
-						</div>
-					</div>
+
+
 				</div>
 
 			</div>
@@ -97,6 +79,7 @@
 	</body>
 	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/const.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		layui.use('element',function(){
 			var $= layui.$;
@@ -105,41 +88,128 @@
 				
 			})
 			
+
 			$.ajax({
 				type:"get",
-				url:"js/chatdata.json",
+				url:window.PRJ_ROOT+"/sy",
 				async:true,
 				success:function(res){
-					console.log(res)
+					var data = JSON.parse(res).data;
+					console.log(JSON.parse(res))	
+					appendA(data);
+					
+					listC()
+						
 				}
 			});
 			
 			
+
 		})
-		function send1(){
-			if ($("#textarea").val()) {
-				$(".aoe").append('<div class="user layui-clear">'+
-					'<div class="img_box">'+
-						'<img src="img/user.jpg" width="85%"/>'+
-					'</div>'+
-					'<div class="text_box">'+
-						'<p class="text_title layui-clear"><span>'+getNowFormatDate()+'</span><span>我</span></p>'+
-						'<p class="text-content">'+
-							$("#textarea").val()
-						+'</p>'+
-					'</div>'+
-				'</div>')
-				$("#textarea").val("")
-				if ($(".aoe").height()-250>0) {
-					$(".aoeBOX").scrollTop($(".aoe").height()-238)
-				}
-				
-				
-			}else{
-				layer.msg("您尚未输入内容")
-				$("#textarea").focus()
-			}
+function listC(){
+	$(".list").off("click").on("click",function(){
+		$(".aoe").append('<div class="user layui-clear">'+
+			'<div class="img_box">'+
+				'<img src="img/user.jpg" width="85%"/>'+
+			'</div>'+
+			'<div class="text_box">'+
+				'<p class="text_title layui-clear"><span>'+getNowFormatDate()+'</span><span>我</span></p>'+
+				'<p class="text-content">'+
+					$(this).html()
+				+'</p>'+
+			'</div>'+
+		'</div>')
+		$("#textarea").val("")
+		if ($(".aoe").height()-250>0) {
+			$(".aoeBOX").scrollTop($(".aoe").height()-238)
 		}
+		
+		
+		
+		var msg = {"id":$(this).attr("data-id"),"isBase":$(this).attr("data-isBase")}
+			$.ajax({
+				type:"post",
+				url:window.PRJ_ROOT+"/click",
+				async:true,
+				data:msg,
+				dataType:"json",
+				success:function(res){
+					var data = res.data;
+					console.log(res)
+					appendA(data)
+					listC()
+					
+				}
+			});
+	})
+}
+
+//answer
+function appendA(data){
+	var list="";
+	console.log(data.isBase)
+	if (data.info.length==0) {
+		list="请联系财安技术部，解决问题"
+	} else{
+		if (data.isBase==false) {
+			for (var i =0;i<data.info.length;i++) {
+				list+="<a class='list'  data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br>"
+			}
+		} else{
+			
+			console.log(data.info)
+			
+			list+="<a  data-id="+data.info['id']+" data-isBase= "+data.info['isBase']+">"+data.info['answer']+"</a></br>"
+			
+		}
+	}
+
+	$(".aoe").stop().append(
+	'<div class="in-rich layui-clear">'+
+		'<div class="img_box">'+
+			'<img src="img/wxLogo.jpg" width="100%"/>'+
+		'</div>'+
+		'<div class="text_box">'+
+			'<p class="text_title layui-clear"><span>财安金融</span><span>'+getNowFormatDate()+'</span></p>'+
+			'<p class="text-content">'+
+				list+
+			'</p>'+
+		'</div>'+
+	'</div>')
+	if ($(".aoe").height()-250>0) {
+			$(".aoeBOX").scrollTop($(".aoe").height()-238)
+	}
+	
+}
+	
+
+	
+		
+//文字输入		
+function send1(){
+	if ($("#textarea").val()) {
+		$(".aoe").append('<div class="user layui-clear">'+
+			'<div class="img_box">'+
+				'<img src="img/user.jpg" width="85%"/>'+
+			'</div>'+
+			'<div class="text_box">'+
+				'<p class="text_title layui-clear"><span>'+getNowFormatDate()+'</span><span>我</span></p>'+
+				'<p class="text-content">'+
+					$("#textarea").val()
+				+'</p>'+
+			'</div>'+
+		'</div>')
+		$("#textarea").val("")
+		if ($(".aoe").height()-250>0) {
+			$(".aoeBOX").scrollTop($(".aoe").height()-238)
+		}
+		
+		
+	}else{
+		layer.msg("您尚未输入内容")
+		$("#textarea").focus()
+	}
+}
 		//时间
 function getNowFormatDate() {
     var date = new Date();

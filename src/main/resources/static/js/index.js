@@ -73,7 +73,7 @@ layui.use(['element','layer','laytpl'],function(){
 	$("#chatOpen").click(function(){
 		layer.open({
 			title:['常见问题查询', 'color: #333;'],
-			area:['405px','410px'],
+			area:['605px','410px'],
 			type:2,
 			anim:1,
 			content:'chat.html',
