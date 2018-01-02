@@ -3,6 +3,7 @@ package com.inrich.model;
 public class LevelTwo extends LevelOne {
 	private int parentId;
 	private String answer;
+	private String imagePath;
 
 	public int getParentId() { 
 		return parentId;
@@ -19,5 +20,19 @@ public class LevelTwo extends LevelOne {
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+	
+	
+
+	
+	
+	
 
 }

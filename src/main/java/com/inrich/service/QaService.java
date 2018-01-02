@@ -2,8 +2,10 @@ package com.inrich.service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.inrich.dao.LevelTwoDAO;
 import com.inrich.model.LevelTwo;
+import com.inrich.util.FileOperation;
 import com.inrich.util.OutPrintUtil;
 import com.inrich.util.StaticValues;
 
@@ -86,6 +90,9 @@ public class QaService {
 		try {
 			String result=doText2Value(text,"ismp");
 			String keyWord=anaylizeText(result);
+			if(StringUtils.isEmpty(keyWord)) {
+				return OutPrintUtil.getJSONString("error", "对不起你的问题有误，可以尝试点击快速查询.");
+			}
 			LevelTwo levelTwo=levelTwoDAO.selectByKeyword(keyWord);
 			if(levelTwo != null) {
 				Map<String,Object> map=new HashMap<>(2);
@@ -103,7 +110,7 @@ public class QaService {
 			logger.error("base64转换错误:"+e.getMessage());
 		}
 		
-		return OutPrintUtil.getJSONString("error", "解析错误");
+		return OutPrintUtil.getJSONString("error", "解析错误!");
 		
 	}
 	
@@ -266,6 +273,10 @@ public class QaService {
 		int rc = jsonObject.getIntValue("rc");
 
 		if (!(rc == 0)) {
+			SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+			String dateSimple=dateFormat.format(new Date());
+			String content=dateSimple+"\t\t问题: "+jsonObject.getString("text");
+			FileOperation.contentAddTxt(StaticValues.ERROR_FILE_PATH, content);
 			return null;
 		}
 		// 服务类型，可以openQA为问答库，其他的则为语意分析

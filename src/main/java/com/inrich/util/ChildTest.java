@@ -109,7 +109,43 @@ public class ChildTest {
 	
 	@Test
 	public void testDoText() {
-		System.out.println(qaService.doText("新催收系统浏览器"));
+		System.out.println(qaService.doText("我不会设置催收系统的浏览器"));
+	}
+	
+	@Test
+	public void testAddPcHelpdesk() {
+		int helpBaseId = 12;
+		
+		String[] questionA = { "PC端邮箱Exchange配置", "Android邮箱Exchange配置", "IOS邮箱Exchange配置"};
+		String[] keyWordA = { "Helpdesk_pc", "Helpdesk_Android", "Helpdesk_IOS"};
+		
+		int i=0;
+		for(String question:questionA) {
+			LevelTwo levelOne=new LevelTwo();
+			levelOne.setParentId(helpBaseId);
+			levelOne.setQuestion(question);
+			levelOne.setKeyWord(keyWordA[i]);
+			i++;
+			levelOne.setLevel(1);
+			int levelOneId=levelTwoDAO.addLevelTwo(levelOne);
+			switch (question) {
+			case "PC端邮箱Exchange配置":
+				String[] questionB= {"1、下载根证书certnew.cer(请在公司内网访问)","2、解压后双击certnew.cer，点击“Install Certificate…”","3、选择证书保存位置：Local Machine(本地计算机)","4、自定义选择证书位置：Place all certificates in the following store-Browser","5、选择“Trusted Root Certification Authorities”（受信任的证书颁布机构)","6、点击“Finish”（完成），完成根证书导入。"};
+				for(String bQuestion:questionB) {
+					LevelTwo blevel=new LevelTwo();
+					blevel.setParentId(levelOneId);
+					blevel.setQuestion(bQuestion);
+					blevel.setIsBase(1);
+					blevel.setLevel(2);
+					levelTwoDAO.addLevelTwo(blevel);
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+		
 	}
 
 }
