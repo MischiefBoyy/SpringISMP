@@ -25,6 +25,7 @@ public class QaController {
 	
 	@RequestMapping("/text")
 	public String doText(@RequestParam("text") String text) {
-		return null;
+		
+		return qaService.doText(text);
 	}
 }
