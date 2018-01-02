@@ -1,7 +1,11 @@
 package com.inrich.util;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 public class OutPrintUtil {
 	public static String getJSONString(String state) {
@@ -19,10 +23,10 @@ public class OutPrintUtil {
 
     
     public static String getJSONString( String state,Object data) {
-        JSONObject json = new JSONObject();
-        json.put("state", state);
-        json.put("data", data);
-        return json.toJSONString();
+    	Map<String,Object> map=new HashMap<>(2);
+        map.put("state", state);
+        map.put("data", data);
+        return JSONObject.toJSONString(map, SerializerFeature.WriteMapNullValue);
     }
 
 }

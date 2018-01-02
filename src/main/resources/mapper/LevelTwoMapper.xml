@@ -3,7 +3,7 @@
 <mapper namespace="com.inrich.dao.LevelTwoDAO">
 	
 	<sql id="table">level_two</sql>
-    <sql id="selectFields">id,question,level,is_base as isBase</sql>
+    <sql id="selectFields">id,question,level,is_base as isBase,image_path as imagePath,answer</sql>
     <sql id="insertFields">
     	level,
     	question,

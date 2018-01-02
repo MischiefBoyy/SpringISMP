@@ -26,7 +26,7 @@ public class ChildTest {
 
 	@Test
 	public void getByClick() {
-		System.out.println(qaService.getByClick(11, 1));
+		System.out.println(qaService.getByClick(13, 0));
 	}
 
 	@Test

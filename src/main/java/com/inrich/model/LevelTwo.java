@@ -4,6 +4,7 @@ public class LevelTwo extends LevelOne {
 	private int parentId;
 	private String answer;
 	private String imagePath;
+	private int isQa;
 
 	public int getParentId() { 
 		return parentId;
@@ -27,6 +28,14 @@ public class LevelTwo extends LevelOne {
 
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
+	}
+
+	public int getIsQa() {
+		return isQa;
+	}
+
+	public void setIsQa(int isQa) {
+		this.isQa = isQa;
 	}
 	
 	

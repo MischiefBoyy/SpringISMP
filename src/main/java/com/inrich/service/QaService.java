@@ -69,13 +69,16 @@ public class QaService {
 	 */
 	public String getByClick(int id,int isBase) {
 		Map<String,Object> map=new HashMap<>(2);
+		LevelTwo currentInfo=levelTwoDAO.selectLevelTwoById(id);
 		if(isBase == 0) {
 			map.put("info", levelTwoDAO.selectLevelTwoByPid(id));
 			map.put("isBase", false);//为了前台判断是否添加可点击样式，false为添加，true为不添加
+			
 		}else {
 			map.put("info", levelTwoDAO.selectLevelTwoById(id));
 			map.put("isBase", true);
 		}
+		map.put("isQa", currentInfo.getIsQa());
 		return OutPrintUtil.getJSONString("success", map);
 	}
 	
