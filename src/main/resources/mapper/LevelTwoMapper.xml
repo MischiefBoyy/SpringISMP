@@ -43,6 +43,13 @@
 			values(#{level}, #{question},#{keyWord},#{clickNum},#{answer},#{parentId},#{isBase})
 	</insert> 
 	
+	<select id="selectByKeyword" resultType="LevelTwo">
+		select * from 
+		<include refid="table"/>
+		where key_word=#{selectByKeyword}
+	</select>
+	
+	
 	
 	
 	

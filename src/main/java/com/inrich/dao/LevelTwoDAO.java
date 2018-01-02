@@ -16,6 +16,8 @@ public interface LevelTwoDAO {
 	
 	int addLevelTwo(LevelTwo LevelTwo);
 	
+	LevelTwo selectByKeyword(String word);
+	
 	
 	
 }

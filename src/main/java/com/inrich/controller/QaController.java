@@ -22,4 +22,9 @@ public class QaController {
 	public String click(@RequestParam("id") int id,@RequestParam("isBase") int isBase) {
 		return qaService.getByClick(id, isBase);
 	}
+	
+	@RequestMapping("/text")
+	public String doText(@RequestParam("text") String text) {
+		return null;
+	}
 }
