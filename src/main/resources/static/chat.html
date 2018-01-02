@@ -9,7 +9,7 @@
 			
 			.layui-form{width: 600px;margin: 5px auto 0;border: 1px solid #009E94;background: #fff;padding-left: 1px;}
 			.bar{border-top: 1px solid #009688;}
-			.aoeBOX{height: 250px;overflow-y: auto;position: relative;}
+			.aoeBOX{height: 450px;overflow-y: auto;position: relative;}
 			.aoeBOX::-webkit-scrollbar {width: 10px;height: 4px;background-color: #F5F5F5;}
 		    .aoeBOX::-webkit-scrollbar-thumb {background-color:#009F95;} 
 		    .aoe{position: absolute;left: 0;top: 0;width: 100%;padding-bottom: 10px;}
@@ -56,6 +56,7 @@
 			}
 			
 			.list{color: #007DDB;}
+			
 		</style>
 	</head>
 	<body>
@@ -151,17 +152,27 @@ function appendA(data){
 	if (data.info.length==0) {
 		list="请联系财安技术部，解决问题"
 	} else{
-		if (data.isBase==false) {
-			for (var i =0;i<data.info.length;i++) {
-				list+="<a class='list'  data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br>"
+		if (data.isQa==0 ||data.isQa==undefined) {
+			if (data.isBase==false) {
+				for (var i =0;i<data.info.length;i++) {
+					list+="<a class='list'  data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br>"
+				}
+			} else{			
+				console.log(data.info)	
+				list+="<a  data-id="+data.info['id']+" data-isBase= "+data.info['isBase']+">"+data.info['answer']+"</a></br>"
+				
 			}
 		} else{
-			
-			console.log(data.info)
-			
-			list+="<a  data-id="+data.info['id']+" data-isBase= "+data.info['isBase']+">"+data.info['answer']+"</a></br>"
-			
+				for (var i =0;i<data.info.length;i++) {
+					if (data.info[i]['imagePath']) {
+						list+="<img src=images/"+data.info[i]['imagePath']+" layer-src=images/"+data.info[i]['imagePath']+" width=50% alt="+data.info[i]['question']+">"
+					} else{
+						list+="<a   data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br>"
+					}
+					
+				}
 		}
+		
 	}
 
 	$(".aoe").stop().append(
@@ -176,6 +187,11 @@ function appendA(data){
 			'</p>'+
 		'</div>'+
 	'</div>')
+	layer.photos({
+	  photos: '.text-content'
+	  
+	  ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+	});
 	if ($(".aoe").height()-250>0) {
 			$(".aoeBOX").scrollTop($(".aoe").height()-238)
 	}
@@ -199,6 +215,23 @@ function send1(){
 				+'</p>'+
 			'</div>'+
 		'</div>')
+		$.ajax({
+				type:"post",
+				url:window.PRJ_ROOT+"/text",
+				async:true,
+				data:{"text":$("#textarea").val()},
+				dataType:"json",
+				success:function(res){
+					var data = res.data;
+					console.log(res)
+					appendA(data)
+					listC()
+					
+				}
+			});
+		
+		
+		
 		$("#textarea").val("")
 		if ($(".aoe").height()-250>0) {
 			$(".aoeBOX").scrollTop($(".aoe").height()-238)
