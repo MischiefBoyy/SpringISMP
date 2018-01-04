@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+	</head>
+	<body>
+		<form  id="form">
+			<div><input type="text" name="name" />
+			<input type="file" name="file" /></div>
+			
+			<input type="text" name="name" />
+			<input type="file" name="file" />
+			<br />
+			<input id="btn" type="button" value="提交"/>
+		</form>
+	</body>
+	<script src="js/const.js" type="text/javascript" charset="utf-8"></script>
+	<script src="layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use("element",function(){
+			var $= layui.$;
+			var Forma = new FormData($("#form")[0])
+			$("#btn").click(function(){
+				console.log(Forma)
+				        $.ajax({  
+				            url: window.PRJ_ROOT+"/upload",  
+				            type: 'POST',  
+				            data: Forma,  
+				            dataType: 'JSON',  
+				            cache: false,  
+				            processData: false,  
+				            contentType: false  
+			        })
+			    });
+				       
+			
+		})
+	</script>
+</html>
