@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+	</head>
+	<style type="text/css">
+		.layui-table-cell{
+			height: auto;line-height: 1.2em;
+		}
+		#addIpt{position: relative;}
+		#addIpt>.layui-btn{position: absolute;left: 50%;margin-left: -20px;border: none;bottom: -30px;}
+	</style>
+	<body>
+		<button class="layui-btn" id="addBtn"><i class="layui-icon">&#xe654;</i>添加</button>
+		<table class="layui-table" lay-data="{url:'table.json', id:'test3'}" lay-filter="test3">
+		  <thead>
+		    <tr>
+		      <th lay-data="{field:'id', width:80, sort: true}">ID</th>
+		      <th lay-data="{field:'pid', width:80, sort: true}">父ID</th>
+		      <th lay-data="{field:'leix', width:80, sort: true }">类型</th>
+		      <th lay-data="{field:'content', edit: 'text', width: 500}">内容</th>
+		      <th lay-data="{field:'sons', width:180, edit: 'text'}">子类</th>
+		    </tr>
+		  </thead>
+		</table>
+		
+		<div class="layui-form layui-form-pane" action="">
+			 <div class="layui-form-item">
+			    <label class="layui-form-label">父级</label>
+			    <div class="layui-input-block">
+			      <select name="interest" >
+			        <option value="">无</option>
+			        <option value="0">新催收系统</option>
+			        <option value="1">环境配置</option>
+			        <option value="2">录音获取</option>    
+			      </select>
+			    </div>
+			  </div>
+			  <div class="layui-form-item">
+			    <label class="layui-form-label">类型</label>
+			    <div class="layui-input-block">
+			      <select name="interest" >
+			        <option value="0">问题</option>
+			        <option value="1">答案</option> 
+			      </select>
+			    </div>
+			  </div>
+			  <div class="layui-form-item">
+			    <label class="layui-form-label">内容</label>
+			     <div class="layui-input-block" id="addIpt">
+			     	<input type="text" class="layui-input"> 
+			     	<button class="layui-btn layui-btn-sm layui-btn-primary"><i class="layui-icon">&#xe654;</i></button>
+			     </div>
+			     
+			  </div>
+		</div>
+	</body>
+	<script src="layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use('table', function(){
+		  var table = layui.table,$=layui.$;
+		  
+		  //监听单元格编辑
+		  table.on('edit(test3)', function(obj){
+		    var value = obj.value //得到修改后的值
+		    ,data = obj.data //得到所在行所有键值
+		    ,field = obj.field; //得到字段
+		    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+		  });
+		  $("#addIpt>.layui-btn").click(function(){
+		  	$("#addIpt").append('<input type="text" class="layui-input">')
+		  })
+		});
+	</script>
+</html>

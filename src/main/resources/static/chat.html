@@ -148,32 +148,37 @@ function listC(){
 //answer
 function appendA(data){
 	var list="";
-	console.log(data.isBase)
-	if (data.info.length==0) {
-		list="请联系财安技术部，解决问题"
-	} else{
-		if (data.isQa==0 ||data.isQa==undefined) {
-			if (data.isBase==false) {
-				for (var i =0;i<data.info.length;i++) {
-					list+="<a class='list'  data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br>"
-				}
-			} else{			
-				console.log(data.info)	
-				list+="<a  data-id="+data.info['id']+" data-isBase= "+data.info['isBase']+">"+data.info['answer']+"</a></br>"
-				
-			}
+	console.log(data)
+	if(data){
+		if (data.info.length==0) {
+			list="请联系财安技术部，解决问题"
 		} else{
-				for (var i =0;i<data.info.length;i++) {
-					if (data.info[i]['imagePath']) {
-						list+="<img src=images/"+data.info[i]['imagePath']+" layer-src=images/"+data.info[i]['imagePath']+" width=50% alt="+data.info[i]['question']+">"
-					} else{
-						list+="<a   data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br>"
+			if (data.isQa==0 ||data.isQa==undefined) {
+				if (data.isBase==false) {
+					for (var i =0;i<data.info.length;i++) {
+						list+="<a class='list'  data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br>"
 					}
+				} else{			
+					console.log(data.info)	
+					list+="<a  data-id="+data.info['id']+" data-isBase= "+data.info['isBase']+">"+data.info['answer']+"</a></br>"
 					
 				}
+			} else{
+					for (var i =0;i<data.info.length;i++) {
+						if (data.info[i]['imagePath']) {
+							list+="<a data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br><img src=images/"+data.info[i]['imagePath']+" layer-src=images/"+data.info[i]['imagePath']+" width=50% alt="+data.info[i]['question']+"></br>"
+						} else{
+							list+="<a data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br>"
+						}
+						
+					}
+			}
+			
 		}
-		
+	}else{
+		list="<a>对不起你的问题有误，可以尝试点击快速查询.</a>"
 	}
+
 
 	$(".aoe").stop().append(
 	'<div class="in-rich layui-clear">'+
