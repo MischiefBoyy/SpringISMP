@@ -15,7 +15,13 @@
         This setting forces generated keys to be used if set to true,
          as some drivers deny compatibility but still work -->
         <setting name="useGeneratedKeys" value="true"/>
+        
+         <!-- 设置Map如果值为null时  将会显示null 而不是没有该key 
+         <setting name="callSettersOnNulls" value="true"/>
+         -->
     </settings>
+    
+  
 
     <!-- Continue going here -->
 

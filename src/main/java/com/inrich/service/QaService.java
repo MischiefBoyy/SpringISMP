@@ -68,12 +68,11 @@ public class QaService {
 	 * @return String
 	 */
 	public String getByClick(int id,int isBase) {
-		Map<String,Object> map=new HashMap<>(2);
+		Map<String,Object> map=new HashMap<>(3);
 		LevelTwo currentInfo=levelTwoDAO.selectLevelTwoById(id);
 		if(isBase == 0) {
 			map.put("info", levelTwoDAO.selectLevelTwoByPid(id));
 			map.put("isBase", false);//为了前台判断是否添加可点击样式，false为添加，true为不添加
-			
 		}else {
 			map.put("info", levelTwoDAO.selectLevelTwoById(id));
 			map.put("isBase", true);
@@ -103,10 +102,12 @@ public class QaService {
 					List<Map<String,Object>> list=levelTwoDAO.selectLevelTwoByPid(levelTwo.getId());
 					map.put("info", list);
 					map.put("isBase", false);
+					
 				}else {
 					map.put("info", levelTwo);
 					map.put("isBase", true);
 				}
+				map.put("isQa", levelTwo.getIsQa());
 				return OutPrintUtil.getJSONString("success", map);
 			}
 		} catch (UnsupportedEncodingException e) {
