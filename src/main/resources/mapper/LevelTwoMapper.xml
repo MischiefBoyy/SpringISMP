@@ -11,7 +11,9 @@
     	click_num,
     	answer,
     	parent_id,
-    	is_base
+    	is_base,
+    	image_path,
+    	is_qa
    	</sql>
 	
 	<select id="selectLevelTwoById" resultType="LevelTwo" >
@@ -40,13 +42,20 @@
 		insert into 
 		 <include refid="table"/>
 			(<include refid="insertFields"/>) 
-			values(#{level}, #{question},#{keyWord},#{clickNum},#{answer},#{parentId},#{isBase})
+			values(#{level}, #{question},#{keyWord},#{clickNum},#{answer},#{parentId},#{isBase},#{imagePath},#{isQa})
 	</insert> 
 	
 	<select id="selectByKeyword" resultType="LevelTwo">
 		select * from 
 		<include refid="table"/>
 		where key_word=#{selectByKeyword}
+	</select>
+	
+	
+	
+	<select id="selectNotBase" resultType="map">
+		select id,question from 
+			<include refid="table"/> where is_base =0
 	</select>
 	
 	

@@ -1,6 +1,9 @@
 package com.inrich.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.http.Consts;
 import org.apache.http.HttpResponse;
@@ -24,9 +28,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.inrich.configuration.PathProperties;
 import com.inrich.dao.LevelTwoDAO;
 import com.inrich.model.LevelTwo;
 import com.inrich.util.FileOperation;
@@ -35,54 +41,56 @@ import com.inrich.util.StaticValues;
 
 @Service
 public class QaService {
-	public static  Logger logger=LoggerFactory.getLogger(QaService.class);
-	
+	public static Logger logger = LoggerFactory.getLogger(QaService.class);
+
 	@Autowired
-	private LevelTwoDAO levelTwoDAO;
-	
+	LevelTwoDAO levelTwoDAO;
+
+	@Autowired
+	PathProperties pathProperties;
+
 	/**
 	 * 查询一级所有列表
+	 * 
 	 * @TODO TODO
 	 * @Time 2017年12月22日 上午11:59:46
 	 * @author WEQ
 	 * @return String
 	 */
 	public String getIndex() {
-		List<LevelTwo> list=levelTwoDAO.selectIndex();
-		Map<String,Object> map=new HashMap<>(2);
+		List<LevelTwo> list = levelTwoDAO.selectIndex();
+		Map<String, Object> map = new HashMap<>(2);
 		map.put("info", list);
 		map.put("isBase", false);
 		return OutPrintUtil.getJSONString("success", map);
-		
+
 	}
-	
-	
-	
-	
-	
+
 	/**
 	 * 通过点击获得的信息 id
+	 * 
 	 * @TODO TODO
 	 * @Time 2017年12月22日 下午1:43:43
 	 * @author WEQ
 	 * @return String
 	 */
-	public String getByClick(int id,int isBase) {
-		Map<String,Object> map=new HashMap<>(3);
-		LevelTwo currentInfo=levelTwoDAO.selectLevelTwoById(id);
-		if(isBase == 0) {
+	public String getByClick(int id, int isBase) {
+		Map<String, Object> map = new HashMap<>(3);
+		LevelTwo currentInfo = levelTwoDAO.selectLevelTwoById(id);
+		if (isBase == 0) {
 			map.put("info", levelTwoDAO.selectLevelTwoByPid(id));
-			map.put("isBase", false);//为了前台判断是否添加可点击样式，false为添加，true为不添加
-		}else {
+			map.put("isBase", false);// 为了前台判断是否添加可点击样式，false为添加，true为不添加
+		} else {
 			map.put("info", levelTwoDAO.selectLevelTwoById(id));
 			map.put("isBase", true);
 		}
 		map.put("isQa", currentInfo.getIsQa());
 		return OutPrintUtil.getJSONString("success", map);
 	}
-	
+
 	/**
-	 *  用户输入问题  科大讯飞 问答库分析  
+	 * 用户输入问题 科大讯飞 问答库分析
+	 * 
 	 * @TODO TODO
 	 * @Time 2018年1月2日 上午10:24:55
 	 * @author WEQ
@@ -90,20 +98,20 @@ public class QaService {
 	 */
 	public String doText(String text) {
 		try {
-			String result=doText2Value(text,"ismp");
-			String keyWord=anaylizeText(result);
-			if(StringUtils.isEmpty(keyWord)) {
+			String result = doText2Value(text, "ismp");
+			String keyWord = anaylizeText(result);
+			if (StringUtils.isEmpty(keyWord)) {
 				return OutPrintUtil.getJSONString("error", "对不起你的问题有误，可以尝试点击快速查询.");
 			}
-			LevelTwo levelTwo=levelTwoDAO.selectByKeyword(keyWord);
-			if(levelTwo != null) {
-				Map<String,Object> map=new HashMap<>(2);
-				if(levelTwo.getIsBase()==0) {
-					List<Map<String,Object>> list=levelTwoDAO.selectLevelTwoByPid(levelTwo.getId());
+			LevelTwo levelTwo = levelTwoDAO.selectByKeyword(keyWord);
+			if (levelTwo != null) {
+				Map<String, Object> map = new HashMap<>(2);
+				if (levelTwo.getIsBase() == 0) {
+					List<Map<String, Object>> list = levelTwoDAO.selectLevelTwoByPid(levelTwo.getId());
 					map.put("info", list);
 					map.put("isBase", false);
-					
-				}else {
+
+				} else {
 					map.put("info", levelTwo);
 					map.put("isBase", true);
 				}
@@ -111,14 +119,13 @@ public class QaService {
 				return OutPrintUtil.getJSONString("success", map);
 			}
 		} catch (UnsupportedEncodingException e) {
-			logger.error("base64转换错误:"+e.getMessage());
+			logger.error("base64转换错误:" + e.getMessage());
 		}
-		
+
 		return OutPrintUtil.getJSONString("error", "解析错误!");
-		
+
 	}
-	
-	
+
 	/**
 	 * 文本语义接口 发送文本到XF服务器
 	 * 
@@ -163,46 +170,42 @@ public class QaService {
 
 		try {
 			// 发起请求
-			result =HttpClientPost(StaticValues.URL_TEXTSEMANTIC_PATH, "utf-8", bodyMap, HeaderMap);
+			result = HttpClientPost(StaticValues.URL_TEXTSEMANTIC_PATH, "utf-8", bodyMap, HeaderMap);
 		} catch (Exception e) {
-			logger.error("科大讯飞解析文本出错："+e.getMessage());
+			logger.error("科大讯飞解析文本出错：" + e.getMessage());
 		}
 
 		return result;
 	}
-	
-	
+
 	private String MD5(String key) {
-        char hexDigits[] = {
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-        };
-        try {
-            byte[] btInput = key.getBytes();
-            // 获得MD5摘要算法的 MessageDigest 对象
-            MessageDigest mdInst = MessageDigest.getInstance("MD5");
-            // 使用指定的字节更新摘要
-            mdInst.update(btInput);
-            // 获得密文
-            byte[] md = mdInst.digest();
-            // 把密文转换成十六进制的字符串形式
-            int j = md.length;
-            char str[] = new char[j * 2];
-            int k = 0;
-            for (int i = 0; i < j; i++) {
-                byte byte0 = md[i];
-                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
-                str[k++] = hexDigits[byte0 & 0xf];
-            }
-            return new String(str);
-        } catch (Exception e) {
-            logger.error("生成MD5失败", e);
-            return null;
-        }
-    }
-	
-	
-	public  String HttpClientPost(String url, String charset, Map<String, Object> entity,
-			Map<String, Object> headers) throws Exception {
+		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+		try {
+			byte[] btInput = key.getBytes();
+			// 获得MD5摘要算法的 MessageDigest 对象
+			MessageDigest mdInst = MessageDigest.getInstance("MD5");
+			// 使用指定的字节更新摘要
+			mdInst.update(btInput);
+			// 获得密文
+			byte[] md = mdInst.digest();
+			// 把密文转换成十六进制的字符串形式
+			int j = md.length;
+			char str[] = new char[j * 2];
+			int k = 0;
+			for (int i = 0; i < j; i++) {
+				byte byte0 = md[i];
+				str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+				str[k++] = hexDigits[byte0 & 0xf];
+			}
+			return new String(str);
+		} catch (Exception e) {
+			logger.error("生成MD5失败", e);
+			return null;
+		}
+	}
+
+	public String HttpClientPost(String url, String charset, Map<String, Object> entity, Map<String, Object> headers)
+			throws Exception {
 		/**
 		 * 返回结果
 		 */
@@ -250,7 +253,7 @@ public class QaService {
 			if (response.getStatusLine().getStatusCode() == status) {
 				result = EntityUtils.toString(response.getEntity(), "utf-8");
 				System.out.println(result);
-			}else {
+			} else {
 				System.out.println("-----访问科大讯飞错误");
 			}
 		} catch (Exception ex) {
@@ -261,10 +264,9 @@ public class QaService {
 
 		return result;
 	}
-	
-	
+
 	private String anaylizeText(String jsonResult) {
-		JSONObject jsonObject=JSONObject.parseObject(jsonResult);
+		JSONObject jsonObject = JSONObject.parseObject(jsonResult);
 		// 状态吗，为00000 则说明范文讯飞成功
 		String code = jsonObject.getString("code");
 		if (!"00000".equals(code)) {
@@ -277,22 +279,123 @@ public class QaService {
 		int rc = jsonObject.getIntValue("rc");
 
 		if (!(rc == 0)) {
-			SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
-			String dateSimple=dateFormat.format(new Date());
-			String content=dateSimple+"\t\t问题: "+jsonObject.getString("text");
-			FileOperation.contentAddTxt(StaticValues.ERROR_FILE_PATH, content);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+			String dateSimple = dateFormat.format(new Date());
+			String content = dateSimple + "\t\t问题: " + jsonObject.getString("text");
+			FileOperation.contentAddTxt(pathProperties.getErrorTxt(), content);
 			return null;
 		}
 		// 服务类型，可以openQA为问答库，其他的则为语意分析
 		String serviceName = jsonObject.getString("service");
-		
-		String keyWord=jsonObject.getJSONObject("answer").getString("text");
-		
+
+		String keyWord = jsonObject.getJSONObject("answer").getString("text");
+
 		return keyWord;
-		
-		
+
 	}
-	
-	
-	
+
+	/**
+	 * 添加类型为 问题 ，map组合 --> question,isQa
+	 * 
+	 * @TODO TODO
+	 * @Time 2018年1月5日 上午10:04:30
+	 * @author WEQ
+	 * @return String
+	 */
+	public String addTypeQuestion(String[] questions,String[]isQas,LevelTwo parentModel) {
+		LevelTwo addInfo = null;
+		int parentId=0;
+		int level=0;
+		if(parentModel != null) {
+			parentId=parentModel.getParentId();
+			level=parentModel.getLevel()+1;
+		}
+		
+		for(int i=0;i<questions.length;i++) {
+			addInfo=new LevelTwo();
+			addInfo.setAnswer(null);
+			addInfo.setClickNum(0);
+			addInfo.setIsBase(0);
+			addInfo.setIsQa(Integer.parseInt(isQas[i]));
+			addInfo.setKeyWord(null);
+			addInfo.setLevel(level);
+			addInfo.setParentId(parentId);
+			addInfo.setQuestion(questions[i]);
+			addInfo.setImagePath(null);
+			levelTwoDAO.addLevelTwo(addInfo);
+		}
+		return OutPrintUtil.getJSONString("success", "保存成功");
+	}
+
+	/**
+	 * 添加类型为 回答，map组合 --> question,answer
+	 * 
+	 * @TODO TODO
+	 * @Time 2018年1月5日 上午10:08:15
+	 * @author WEQ
+	 * @return String
+	 */
+	public String addTypeAnswer(String[] questions,String[] answers, LevelTwo parentModel) {
+		LevelTwo addInfo = null;
+		for(int i=0;i<questions.length;i++) {
+			addInfo=new LevelTwo();
+			addInfo.setAnswer(answers[i]);
+			addInfo.setClickNum(0);
+			addInfo.setIsBase(1);
+			addInfo.setIsQa(0);
+			addInfo.setKeyWord(null);
+			addInfo.setLevel(parentModel.getLevel() + 1);
+			addInfo.setParentId(parentModel.getId());
+			addInfo.setQuestion(questions[i]);
+			addInfo.setImagePath(null);
+			levelTwoDAO.addLevelTwo(addInfo);
+		}
+		return OutPrintUtil.getJSONString("success", "保存成功");
+	}
+
+	/**
+	 * 添加类型为 问题图片，map组合 --> question,image
+	 * 
+	 * @TODO TODO
+	 * @Time 2018年1月5日 上午10:10:04
+	 * @author WEQ
+	 * @return String
+	 */
+	public String addTypeImage(List<MultipartFile> files, String[] questions, LevelTwo parentModel) {
+		
+		LevelTwo addInfo = null;
+		for (int i = 0; i < questions.length; i++) {
+			String fileName = null;
+			// 1.保存文件
+			if (!StringUtils.isEmpty(files.get(i).getOriginalFilename())) {
+				try {
+					int dotPos = files.get(i).getOriginalFilename().lastIndexOf(".");
+					String fileExt = files.get(i).getOriginalFilename().substring(dotPos + 1).toLowerCase();
+					fileName = UUID.randomUUID().toString() + "."+fileExt;
+					if(!new File(pathProperties.getImages()).exists()) {
+						System.out.println("-----创建文件夹");
+						new File(pathProperties.getImages()).mkdirs();
+					}
+					//保存图片
+					Files.copy(files.get(i).getInputStream(), new File(pathProperties.getImages() + fileName).toPath());
+				} catch (IOException e) {
+					logger.error("保存图片出现问题:" + e.getMessage());
+					return OutPrintUtil.getJSONString("error", "保存图片错误。");
+				}
+			}
+			addInfo = new LevelTwo();
+			addInfo.setAnswer(null);
+			addInfo.setClickNum(0);
+			addInfo.setIsBase(1);
+			addInfo.setIsQa(0);
+			addInfo.setKeyWord(null);
+			addInfo.setLevel(parentModel.getLevel() + 1);
+			addInfo.setParentId(parentModel.getId());
+			addInfo.setQuestion(questions[i]);
+			addInfo.setImagePath(fileName);
+			levelTwoDAO.addLevelTwo(addInfo);
+		}
+		 return OutPrintUtil.getJSONString("success", "保存成功");
+	}
+
 }

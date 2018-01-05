@@ -18,6 +18,8 @@ public interface LevelTwoDAO {
 	
 	LevelTwo selectByKeyword(String word);
 	
+	List<Map<String,Object>> selectNotBase();
+	
 	
 	
 }
