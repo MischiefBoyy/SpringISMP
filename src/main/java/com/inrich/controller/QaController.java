@@ -82,4 +82,10 @@ public class QaController {
 		
 		return result;
 	}
+	
+	@RequestMapping("/getParent")
+	public String getParent() {
+		List<Map<String,Object>> list=levelTwoDAO.selectNotBase();
+		return OutPrintUtil.getJSONString("success", list); 
+	}
 }
