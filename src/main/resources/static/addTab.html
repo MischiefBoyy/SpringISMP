@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+		<style type="text/css">
+			
+			#onlyQ,#QaI,#QaA{position: relative;display: none;}
+			#onlyQ{display: block;}
+			#onlyQ>button,#QaI>button,#QaA>button{border: none;position: absolute;left: 50%;margin-left: -16px;bottom: -30px;}
+			#onlyQ>div,#QaI>div,#QaA>div{width: 50%;display: inline-block;float: left;}
+			#onlyQ>.qbox{width: 70%;}
+			#onlyQ>.sbox{width: 30%;}
+		</style>
+	</head>
+	<body>
+		<form id="form" class="layui-form layui-form-pane">
+			 <div class="layui-form-item">
+			    <label class="layui-form-label">搜索父级</label>
+			      <div class="layui-input-inline">
+			        <select name="id" lay-search="" id="parents">
+			          <option value="">直接选择或搜索选择</option>
+			          <option value="-1">无父级</option>
+			        </select>
+			      </div>
+			 </div>
+			 <div class="layui-form-item">
+			    <label class="layui-form-label">选择类型</label>
+			      <div class="layui-input-inline">
+			        <select name="modules" lay-filter="tType" id="modules">
+			          <option value="1">只有问题</option>
+			          <option value="2">问题与回答</option>
+			          <option value="3">描述与图片</option>
+			        </select>
+			      </div>
+			      	
+			      	  
+			 </div>
+			 <!--只有问题-->
+			 <div class="layui-form-item" id="onlyQ">
+			 	<div class="qbox">
+			 		<label class="layui-form-label">问题</label>
+				 	<div class="layui-input-block qbox">
+				        <input type="text" class="layui-input" name="question" /> 
+				    </div>
+			 	</div>
+			    <div class="sbox">
+			    	<label class="layui-form-label" id="isQAlabel">是否QA问答</label>
+			 		<div class="layui-input-inline" id="isQAswitch">
+			      		<input type="checkbox" name="close" lay-skin="switch" lay-text="是|否">
+			    	</div>
+			    </div>
+			    
+			    	
+			    <button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>	
+			 </div>
+			 <!--问题+答案-->
+			 <div class="layui-form-item" id="QaA">
+			 	<!--<div class="tqbox">
+			 		<label class="layui-form-label">问题</label>
+				 	<div class="layui-input-block QaABOX">
+				        <input type="text" class="layui-input" name="question" />
+				    </div>
+			 	</div>
+			    <div class="tabox">
+			    	<label class="layui-form-label">答案</label>
+				 	<div class="layui-input-block QaABOX">
+				        <input type="text" class="layui-input" name="answer" />
+				    </div>
+			    </div>
+			    <button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>-->
+			 </div>
+			<!--描述+图片-->
+			<div class="layui-form-item" id="QaI">
+				<!--<div class="tqbox">
+			 		<label class="layui-form-label">描述</label>
+				 	<div class="layui-input-block QaABOX">
+				        <input type="text" class="layui-input" name="question" />
+				    </div>
+			 	</div>
+			    <div class="tabox">
+			    	<label class="layui-form-label">图片</label>
+				 	<div class="layui-input-block QaABOX">
+				        <input type="file" class="layui-input" name="file" />
+				    </div>
+			    </div>
+			    <button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>-->
+			</div>
+			<button class="layui-btn" id="btnS" type="button">提交</button>
+		</form>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/const.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use("element",function(){
+			var $= layui.$,form=layui.form,layer=layui.layer;
+			
+			$.ajax({
+				type:"get",
+				url:window.PRJ_ROOT+"/getParent",
+				async:true,
+				success:function(res){
+					console.log(JSON.parse(res))
+					var data = JSON.parse(res).data;
+					
+					for (var i=0;i<data.length;i++) {
+						$("#parents").append('<option value='+data[i]["id"]+'>'+data[i]["question"]+'</option>')
+					}
+					form.render('');
+				}
+			});
+			form.on('select(tType)', function(data){
+			  if (data.value==1) {
+			  	$("#onlyQ").show();
+			  	$("#onlyQ").html('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="sbox"><label class="layui-form-label" id="isQAlabel">是否QA问答</label><div class="layui-input-inline" id="isQAswitch"><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div><button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>')
+			  	form.render('');
+			  	$("#QaA").hide();
+			  	$("#QaA").html("");
+			  	$("#QaI").hide();
+			  	$("#QaI").html("");
+			  	$("#onlyQ>.layui-btn").click(function(){
+					$("#onlyQ").append('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="sbox"><label class="layui-form-label" id="isQAlabel">是否QA问答</label><div class="layui-input-inline" id="isQAswitch"><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div>')
+					form.render('');	
+				})
+			  } else if(data.value==2){
+			  	$("#onlyQ").hide();$("#onlyQ").html("");
+			  	$("#QaA").show();$("#QaA").html('<div class="tqbox"><label class="layui-form-label">问题</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">答案</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="answer" /></div></div><button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>')
+			  	$("#QaI").hide();$("#QaI").html("");
+				  	$("#QaA>.layui-btn").click(function(){
+					$("#QaA").append('<div class="tqbox"><label class="layui-form-label">问题</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">答案</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="answer" /></div></div>')
+				})
+			  }else{
+			  	$("#onlyQ").hide();$("#onlyQ").html("");
+			  	$("#QaA").hide();	$("#QaA").html("");
+			  	$("#QaI").show();$("#QaI").html('<div class="tqbox"><label class="layui-form-label">描述</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">图片</label><div class="layui-input-block QaABOX"><input type="file" class="layui-input" name="file" /></div></div><button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>')
+			  	
+			  	$("#QaI>.layui-btn").click(function(){
+					$("#QaI").append('<div class="tqbox"><label class="layui-form-label">描述</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">图片</label><div class="layui-input-block QaABOX"><input type="file" class="layui-input" name="file" /></div></div>')
+				})
+			  }
+			}); 
+			$("#onlyQ>.layui-btn").click(function(){
+				$("#onlyQ").append('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="sbox"><label class="layui-form-label" id="isQAlabel">是否QA问答</label><div class="layui-input-inline" id="isQAswitch"><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div>')
+				form.render('');	
+			})
+			
+			
+			$("#btnS").click(function(){
+				console.log($("#isQAswitch>input").is(':checked'))
+				if ($("#modules").val()==1) {
+					var Formdata1 = new FormData($("#form")[0])
+					Formdata1.delete("close")
+					Formdata1.delete("modules")
+					
+					for (var i=0;i<$("#onlyQ .sbox input").length;i++) {
+						if ($("#isQAswitch>input").eq(i).is(':checked')) {
+							Formdata1.append("isQa",1)
+						} else{
+							Formdata1.append("isQa",0)
+						}
+					}
+				}else if($("#modules").val()==2){
+					var Formdata1 = new FormData($("#form")[0])
+					Formdata1.delete("modules")
+				}else if($("#modules").val()==3){
+					var Formdata1 = new FormData($("#form")[0])
+					Formdata1.delete("modules")
+				}
+				$.ajax({  
+			            url: window.PRJ_ROOT+"/addIsmp",  
+			            type: 'POST',  
+			            data: Formdata1, 
+			            cache: false,  
+			            processData: false,  
+			            contentType: false,
+			            success:function(res){
+			            	layer.msg(JSON.parse(res).msg)
+			            }
+			        })
+			})
+			
+		})
+	</script>
+</html>
