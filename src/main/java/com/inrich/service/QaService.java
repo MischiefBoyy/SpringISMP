@@ -302,7 +302,7 @@ public class QaService {
 	 * @author WEQ
 	 * @return String
 	 */
-	public String addTypeQuestion(String[] questions,String[]isQas,LevelTwo parentModel) {
+	public String addTypeQuestion(String[] questions,String[]isQas,String[] keyWords,LevelTwo parentModel) {
 		LevelTwo addInfo = null;
 		int parentId=0;
 		int level=0;
@@ -317,7 +317,7 @@ public class QaService {
 			addInfo.setClickNum(0);
 			addInfo.setIsBase(0);
 			addInfo.setIsQa(Integer.parseInt(isQas[i]));
-			addInfo.setKeyWord(null);
+			addInfo.setKeyWord(StringUtils.isEmpty(keyWords[i])?null:keyWords[i]);
 			addInfo.setLevel(level);
 			addInfo.setParentId(parentId);
 			addInfo.setQuestion(questions[i]);
@@ -335,7 +335,7 @@ public class QaService {
 	 * @author WEQ
 	 * @return String
 	 */
-	public String addTypeAnswer(String[] questions,String[] answers, LevelTwo parentModel) {
+	public String addTypeAnswer(String[] questions,String[] answers, String[] keyWords,LevelTwo parentModel) {
 		LevelTwo addInfo = null;
 		for(int i=0;i<questions.length;i++) {
 			addInfo=new LevelTwo();
@@ -343,7 +343,7 @@ public class QaService {
 			addInfo.setClickNum(0);
 			addInfo.setIsBase(1);
 			addInfo.setIsQa(0);
-			addInfo.setKeyWord(null);
+			addInfo.setKeyWord(StringUtils.isEmpty(keyWords[i])?null:keyWords[i]);
 			addInfo.setLevel(parentModel.getLevel() + 1);
 			addInfo.setParentId(parentModel.getId());
 			addInfo.setQuestion(questions[i]);

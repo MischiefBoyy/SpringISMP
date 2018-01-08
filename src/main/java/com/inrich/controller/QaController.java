@@ -1,11 +1,6 @@
 package com.inrich.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +49,7 @@ public class QaController {
 		System.out.println("-----id:"+id);
 		String result=null;
 		List<MultipartFile> files=null;
+		String []keyWords=null;
 		files = ((MultipartHttpServletRequest) request).getFiles("file");
 		System.out.println("---------"+files.size());
 		LevelTwo parentModel=levelTwoDAO.selectLevelTwoById(id);
@@ -66,19 +62,22 @@ public class QaController {
 			result=qaService.addTypeImage(files,questions,parentModel);
 			return result;
 		}
+		
+		keyWords=request.getParameterValues("keyWord");
+		System.out.println("keyWords:"+Arrays.toString(keyWords));
 		if(request.getParameterValues("answer") != null) {
 			System.out.println("------进入添加回答");
 			String []answers=request.getParameterValues("answer");
 			if(parentModel == null) {
 				return OutPrintUtil.getJSONString("error", "基类问答，父类不能为空。");
 			}
-			result=qaService.addTypeAnswer(questions, answers,parentModel);
+			result=qaService.addTypeAnswer(questions, answers,keyWords,parentModel);
 			return result;
 		}
 		
 		System.out.println("------进入添加问题");
 		String []isQas=request.getParameterValues("isQa");
-		result=qaService.addTypeQuestion(questions, isQas, parentModel);
+		result=qaService.addTypeQuestion(questions, isQas, keyWords,parentModel);
 		
 		return result;
 	}
