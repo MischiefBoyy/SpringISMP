@@ -58,6 +58,13 @@
 			<include refid="table"/> where is_base =0
 	</select>
 	
+	<select id="selectTableJson" resultType="map">
+		select id,question,parent_id as parentId,is_base as isBase from 
+			<include refid="table"/> order by id asc
+	</select>
+	
+	
+	
 	
 	
 	

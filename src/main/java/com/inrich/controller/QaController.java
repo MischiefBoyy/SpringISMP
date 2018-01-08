@@ -64,7 +64,7 @@ public class QaController {
 		}
 		
 		keyWords=request.getParameterValues("keyWord");
-		System.out.println("keyWords:"+Arrays.toString(keyWords));
+		//System.out.println("keyWords:"+Arrays.toString(keyWords));
 		if(request.getParameterValues("answer") != null) {
 			System.out.println("------进入添加回答");
 			String []answers=request.getParameterValues("answer");

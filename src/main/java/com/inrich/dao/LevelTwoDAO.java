@@ -21,5 +21,8 @@ public interface LevelTwoDAO {
 	List<Map<String,Object>> selectNotBase();
 	
 	
+	List<Map<String,Object>> selectTableJson();
+	
+	
 	
 }

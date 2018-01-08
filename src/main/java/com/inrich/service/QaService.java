@@ -35,6 +35,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.inrich.configuration.PathProperties;
 import com.inrich.dao.LevelTwoDAO;
 import com.inrich.model.LevelTwo;
+import com.inrich.model.TabModel;
 import com.inrich.util.FileOperation;
 import com.inrich.util.OutPrintUtil;
 import com.inrich.util.StaticValues;
@@ -397,5 +398,72 @@ public class QaService {
 		}
 		 return OutPrintUtil.getJSONString("success", "保存成功");
 	}
-
+	
+	/**
+	 * 获取菜单项，返回格式参照layui
+	 * @TODO TODO
+	 * @Time 2018年1月8日 下午4:07:27
+	 * @author WEQ
+	 * @return String
+	 */
+	public String getTable() {
+		List<Map<String,Object>> tabList=levelTwoDAO.selectTableJson();
+		
+		
+		List<TabModel> infos=new ArrayList<>();
+		
+		//添加父类
+		for(Map<String,Object> map: tabList) {
+			if((int)map.get("parentId") == 0) {
+				TabModel model=new TabModel();
+				model.setId((int)map.get("id"));
+				model.setName(map.get("question").toString());
+				model.setIsBase((int)map.get("isBase"));
+				infos.add(model);
+			}
+		}
+		
+		for(TabModel aModel: infos) {
+			aModel.setChildren(getChild(aModel.getId(),tabList));
+		}
+		
+		
+		
+		
+		
+		return null;
+	}
+	
+	
+	private List<TabModel> getChild(int id,List<Map<String,Object>> tabList){
+		List<TabModel> childList =new ArrayList<>(16);
+		
+		for(Map<String,Object> map:tabList) {
+			if((int)map.get("parentId") == id) {
+				TabModel model=new TabModel();
+				model.setId((int)map.get("id"));
+				model.setName(map.get("question").toString());
+				model.setIsBase((int)map.get("isBase"));
+				childList.add(model);
+			}
+		}
+		
+		
+		for(TabModel childModel:childList) {
+			if(childModel.getIsBase() == 0) {
+				childModel.setChildren(getChild(childModel.getId(),tabList));
+			}
+		}
+		
+		// 递归退出条件
+	    if (childList.size() == 0) {
+	        return null;
+	    }
+	    return childList;
+		
+		
+	}
+	
+	
+	
 }
