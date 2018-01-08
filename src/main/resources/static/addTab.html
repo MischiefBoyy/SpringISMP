@@ -10,8 +10,10 @@
 			#onlyQ{display: block;}
 			#onlyQ>button,#QaI>button,#QaA>button{border: none;position: absolute;left: 50%;margin-left: -16px;bottom: -30px;}
 			#onlyQ>div,#QaI>div,#QaA>div{width: 50%;display: inline-block;float: left;}
-			#onlyQ>.qbox{width: 70%;}
-			#onlyQ>.sbox{width: 30%;}
+			#onlyQ>.qbox{width: 50%;}
+			#onlyQ>.sbox{width: 20%;}
+			#onlyQ>.gjzBox{width: 20%;}
+			#QaA>div{width: 30%;}
 		</style>
 	</head>
 	<body>
@@ -38,25 +40,30 @@
 			      	  
 			 </div>
 			 <!--只有问题-->
-			 <div class="layui-form-item" id="onlyQ">
+			 <div class="layui-form-item layui-clear" id="onlyQ">
 			 	<div class="qbox">
 			 		<label class="layui-form-label">问题</label>
 				 	<div class="layui-input-block qbox">
 				        <input type="text" class="layui-input" name="question" /> 
 				    </div>
 			 	</div>
+
+			    <div class="gjzBox">
+			    	<label class="layui-form-label" >关键字</label>
+			 		<div class="layui-input-inline keyWord" >
+			      		<input type="text" name="keyWord" class="layui-input">
+			    	</div>
+			    </div>
 			    <div class="sbox">
-			    	<label class="layui-form-label" id="isQAlabel">是否QA问答</label>
-			 		<div class="layui-input-inline" id="isQAswitch">
+			    	<label class="layui-form-label" >是否QA问答</label>
+			 		<div class="layui-input-inline isQAswitch" >
 			      		<input type="checkbox" name="close" lay-skin="switch" lay-text="是|否">
 			    	</div>
 			    </div>
-			    
-			    	
 			    <button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>	
 			 </div>
 			 <!--问题+答案-->
-			 <div class="layui-form-item" id="QaA">
+			 <div class="layui-form-item layui-clear" id="QaA">
 			 	<!--<div class="tqbox">
 			 		<label class="layui-form-label">问题</label>
 				 	<div class="layui-input-block QaABOX">
@@ -72,7 +79,7 @@
 			    <button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>-->
 			 </div>
 			<!--描述+图片-->
-			<div class="layui-form-item" id="QaI">
+			<div class="layui-form-item layui-clear" id="QaI">
 				<!--<div class="tqbox">
 			 		<label class="layui-form-label">描述</label>
 				 	<div class="layui-input-block QaABOX">
@@ -114,22 +121,22 @@
 			form.on('select(tType)', function(data){
 			  if (data.value==1) {
 			  	$("#onlyQ").show();
-			  	$("#onlyQ").html('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="sbox"><label class="layui-form-label" id="isQAlabel">是否QA问答</label><div class="layui-input-inline" id="isQAswitch"><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div><button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>')
+			  	$("#onlyQ").html('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="gjzBox"><label class="layui-form-label" >关键字</label><div class="layui-input-inline keyWord" ><input type="text" name="keyWord" class="layui-input"></div></div><div class="sbox"><label class="layui-form-label" >是否QA问答</label><div class="layui-input-inline isQAswitch" ><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div><button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>')
 			  	form.render('');
 			  	$("#QaA").hide();
 			  	$("#QaA").html("");
 			  	$("#QaI").hide();
 			  	$("#QaI").html("");
 			  	$("#onlyQ>.layui-btn").click(function(){
-					$("#onlyQ").append('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="sbox"><label class="layui-form-label" id="isQAlabel">是否QA问答</label><div class="layui-input-inline" id="isQAswitch"><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div>')
+					$("#onlyQ").append('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="gjzBox"><label class="layui-form-label" >关键字</label><div class="layui-input-inline keyWord" ><input type="text" name="keyWord" class="layui-input"></div></div><div class="sbox"><label class="layui-form-label" >是否QA问答</label><div class="layui-input-inline isQAswitch" ><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div>')
 					form.render('');	
 				})
 			  } else if(data.value==2){
 			  	$("#onlyQ").hide();$("#onlyQ").html("");
-			  	$("#QaA").show();$("#QaA").html('<div class="tqbox"><label class="layui-form-label">问题</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">答案</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="answer" /></div></div><button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>')
+			  	$("#QaA").show();$("#QaA").html('<div class="tqbox"><label class="layui-form-label">问题</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">答案</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="answer" /></div></div><div class="gjzBox"><label class="layui-form-label" >关键字</label><div class="layui-input-inline keyWord" ><input type="text" name="keyWord" class="layui-input"></div></div><button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>')
 			  	$("#QaI").hide();$("#QaI").html("");
 				  	$("#QaA>.layui-btn").click(function(){
-					$("#QaA").append('<div class="tqbox"><label class="layui-form-label">问题</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">答案</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="answer" /></div></div>')
+					$("#QaA").append('<div class="tqbox"><label class="layui-form-label">问题</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">答案</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="answer" /></div></div><div class="gjzBox"><label class="layui-form-label" >关键字</label><div class="layui-input-inline keyWord" ><input type="text" name="keyWord" class="layui-input"></div></div>')
 				})
 			  }else{
 			  	$("#onlyQ").hide();$("#onlyQ").html("");
@@ -142,20 +149,20 @@
 			  }
 			}); 
 			$("#onlyQ>.layui-btn").click(function(){
-				$("#onlyQ").append('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="sbox"><label class="layui-form-label" id="isQAlabel">是否QA问答</label><div class="layui-input-inline" id="isQAswitch"><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div>')
+				$("#onlyQ").append('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="gjzBox"><label class="layui-form-label" >关键字</label><div class="layui-input-inline keyWord" ><input type="text" name="keyWord" class="layui-input"></div></div><div class="sbox"><label class="layui-form-label" >是否QA问答</label><div class="layui-input-inline isQAswitch" ><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div>')
 				form.render('');	
 			})
 			
 			
 			$("#btnS").click(function(){
-				console.log($("#isQAswitch>input").is(':checked'))
+				console.log($(".isQAswitch>input").is(':checked'))
 				if ($("#modules").val()==1) {
 					var Formdata1 = new FormData($("#form")[0])
 					Formdata1.delete("close")
 					Formdata1.delete("modules")
 					
 					for (var i=0;i<$("#onlyQ .sbox input").length;i++) {
-						if ($("#isQAswitch>input").eq(i).is(':checked')) {
+						if ($(".isQAswitch>input").eq(i).is(':checked')) {
 							Formdata1.append("isQa",1)
 						} else{
 							Formdata1.append("isQa",0)
