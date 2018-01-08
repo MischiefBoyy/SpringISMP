@@ -54,7 +54,7 @@
 	
 	
 	<select id="selectNotBase" resultType="map">
-		select id,question from 
+		select id,question,is_qa as isQa from 
 			<include refid="table"/> where is_base =0
 	</select>
 	

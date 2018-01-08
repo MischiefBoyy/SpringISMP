@@ -7,11 +7,17 @@
 	</head>
 	<body>
 		<form  id="form">
-			<div><input type="text" name="name" />
-			<input type="file" name="file" /></div>
+			<div><input type="text" name="question" />
+		<input type="text" name="answer" /> 
+			<input type="file" name="file" /> </div>
 			
-			<input type="text" name="name" />
-			<input type="file" name="file" />
+			<div><input type="text" name="question" />
+			<input type="text" name="answer" /> 
+			<input type="file" name="file" /> </div>
+			
+			<input type="text" name="question" />
+			<input type="text" name="answer" /> 
+			<input type="file" name="file" /> 
 			<br />
 			<input id="btn" type="button" value="提交"/>
 		</form>
@@ -21,14 +27,14 @@
 	<script type="text/javascript">
 		layui.use("element",function(){
 			var $= layui.$;
-			var Forma = new FormData($("#form")[0])
 			$("#btn").click(function(){
+				var Forma = new FormData($("#form")[0]);
+				Forma.append("id","49");
 				console.log(Forma)
 				        $.ajax({  
-				            url: window.PRJ_ROOT+"/upload",  
+				            url: window.PRJ_ROOT+"/addIsmp",  
 				            type: 'POST',  
 				            data: Forma,  
-				            dataType: 'JSON',  
 				            cache: false,  
 				            processData: false,  
 				            contentType: false  

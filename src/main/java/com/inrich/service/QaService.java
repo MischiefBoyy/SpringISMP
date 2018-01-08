@@ -307,7 +307,7 @@ public class QaService {
 		int parentId=0;
 		int level=0;
 		if(parentModel != null) {
-			parentId=parentModel.getParentId();
+			parentId=parentModel.getId();
 			level=parentModel.getLevel()+1;
 		}
 		
@@ -371,7 +371,7 @@ public class QaService {
 				try {
 					int dotPos = files.get(i).getOriginalFilename().lastIndexOf(".");
 					String fileExt = files.get(i).getOriginalFilename().substring(dotPos + 1).toLowerCase();
-					fileName = UUID.randomUUID().toString() + "."+fileExt;
+					fileName = UUID.randomUUID().toString().replaceAll("-", "") + "."+fileExt;
 					if(!new File(pathProperties.getImages()).exists()) {
 						System.out.println("-----创建文件夹");
 						new File(pathProperties.getImages()).mkdirs();
