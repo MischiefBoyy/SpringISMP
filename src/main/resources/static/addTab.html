@@ -7,13 +7,14 @@
 		<style type="text/css">
 			
 			#onlyQ,#QaI,#QaA{position: relative;display: none;}
-			#onlyQ{display: block;}
+			/*#onlyQ{display: block;}*/
 			#onlyQ>button,#QaI>button,#QaA>button{border: none;position: absolute;left: 50%;margin-left: -16px;bottom: -30px;}
 			#onlyQ>div,#QaI>div,#QaA>div{width: 50%;display: inline-block;float: left;}
 			#onlyQ>.qbox{width: 50%;}
 			#onlyQ>.sbox{width: 20%;}
 			#onlyQ>.gjzBox{width: 20%;}
 			#QaA>div{width: 30%;}
+			#tType{display: none;}
 		</style>
 	</head>
 	<body>
@@ -21,19 +22,17 @@
 			 <div class="layui-form-item">
 			    <label class="layui-form-label">搜索父级</label>
 			      <div class="layui-input-inline">
-			        <select name="id" lay-search="" id="parents">
+			        <select name="id" lay-search="" lay-filter="pQ" id="parents">
 			          <option value="">直接选择或搜索选择</option>
-			          <option value="-1">无父级</option>
+			          <option value="-1" data-Qa="0">无父级</option>
 			        </select>
 			      </div>
 			 </div>
-			 <div class="layui-form-item">
+			 <div class="layui-form-item" id="tType">
 			    <label class="layui-form-label">选择类型</label>
 			      <div class="layui-input-inline">
 			        <select name="modules" lay-filter="tType" id="modules">
-			          <option value="1">只有问题</option>
-			          <option value="2">问题与回答</option>
-			          <option value="3">描述与图片</option>
+			          
 			        </select>
 			      </div>
 			      	
@@ -63,37 +62,9 @@
 			    <button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>	
 			 </div>
 			 <!--问题+答案-->
-			 <div class="layui-form-item layui-clear" id="QaA">
-			 	<!--<div class="tqbox">
-			 		<label class="layui-form-label">问题</label>
-				 	<div class="layui-input-block QaABOX">
-				        <input type="text" class="layui-input" name="question" />
-				    </div>
-			 	</div>
-			    <div class="tabox">
-			    	<label class="layui-form-label">答案</label>
-				 	<div class="layui-input-block QaABOX">
-				        <input type="text" class="layui-input" name="answer" />
-				    </div>
-			    </div>
-			    <button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>-->
-			 </div>
+			 <div class="layui-form-item layui-clear" id="QaA"></div>
 			<!--描述+图片-->
-			<div class="layui-form-item layui-clear" id="QaI">
-				<!--<div class="tqbox">
-			 		<label class="layui-form-label">描述</label>
-				 	<div class="layui-input-block QaABOX">
-				        <input type="text" class="layui-input" name="question" />
-				    </div>
-			 	</div>
-			    <div class="tabox">
-			    	<label class="layui-form-label">图片</label>
-				 	<div class="layui-input-block QaABOX">
-				        <input type="file" class="layui-input" name="file" />
-				    </div>
-			    </div>
-			    <button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>-->
-			</div>
+			<div class="layui-form-item layui-clear" id="QaI"></div>
 			<button class="layui-btn" id="btnS" type="button">提交</button>
 		</form>
 	</body>
@@ -111,11 +82,42 @@
 				success:function(res){
 					console.log(JSON.parse(res))
 					var data = JSON.parse(res).data;
-					
 					for (var i=0;i<data.length;i++) {
-						$("#parents").append('<option value='+data[i]["id"]+'>'+data[i]["question"]+'</option>')
+						$("#parents").append('<option value='+data[i]["id"]+' data-Qa='+data[i]["isQa"]+'>'+data[i]["question"]+'</option>')
 					}
 					form.render('');
+					form.on('select(pQ)', function(data){
+						console.log(data.elem)
+						if ($("#parents").find("option:selected").attr("data-Qa")==0) {
+							$("#modules").html('<option value="1">只有问题</option> <option value="2">问题与回答</option>')
+							form.render('')
+							$("#onlyQ").show();
+						  	$("#onlyQ").html('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="gjzBox"><label class="layui-form-label" >关键字</label><div class="layui-input-inline keyWord" ><input type="text" name="keyWord" class="layui-input"></div></div><div class="sbox"><label class="layui-form-label" >是否QA问答</label><div class="layui-input-inline isQAswitch" ><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div><button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>')
+						  	form.render('');
+						  	$("#QaA").hide();
+						  	$("#QaA").html("");
+						  	$("#QaI").hide();
+						  	$("#QaI").html("");
+						  	$("#onlyQ>.layui-btn").click(function(){
+								$("#onlyQ").append('<div class="qbox"><label class="layui-form-label">问题</label><div class="layui-input-block qbox"><input type="text" class="layui-input" name="question" /></div></div><div class="gjzBox"><label class="layui-form-label" >关键字</label><div class="layui-input-inline keyWord" ><input type="text" name="keyWord" class="layui-input"></div></div><div class="sbox"><label class="layui-form-label" >是否QA问答</label><div class="layui-input-inline isQAswitch" ><input type="checkbox" name="close" lay-skin="switch" lay-text="是|否"></div></div>')
+								form.render('');	
+							})
+						} else{
+							$("#modules").html('<option value="3">描述与图片</option>')
+							form.render('')
+							$("#onlyQ").hide();$("#onlyQ").html("");
+						  	$("#QaA").hide();	$("#QaA").html("");
+						  	$("#QaI").show();$("#QaI").html('<div class="tqbox"><label class="layui-form-label">描述</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">图片</label><div class="layui-input-block QaABOX"><input type="file" class="layui-input" name="file" /></div></div><button class="layui-btn layui-btn-sm layui-btn-primary  layui-icon" type="button">&#xe654;</button>')
+						  	
+						  	$("#QaI>.layui-btn").click(function(){
+								$("#QaI").append('<div class="tqbox"><label class="layui-form-label">描述</label><div class="layui-input-block QaABOX"><input type="text" class="layui-input" name="question" /></div></div><div class="tabox"><label class="layui-form-label">图片</label><div class="layui-input-block QaABOX"><input type="file" class="layui-input" name="file" /></div></div>')
+							})
+			  
+		
+						}
+						form.render('')
+						$("#tType").show()
+					})
 				}
 			});
 			form.on('select(tType)', function(data){
