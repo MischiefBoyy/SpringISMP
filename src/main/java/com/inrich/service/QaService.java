@@ -470,5 +470,22 @@ public class QaService {
 	}
 	
 	
+	public String editISMP(Map<String,Object> map,MultipartFile file) {
+		
+		if(file != null) {
+			//做保存图片的操作
+			map.put("image_path", "aaaaaaaaaaa");
+			
+			
+		}
+		
+		System.out.println(JSON.toJSONString(map));
+		
+		levelTwoDAO.updateISMP(map);
+		
+		return "aa";
+	}
+	
+	
 	
 }

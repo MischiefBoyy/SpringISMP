@@ -76,5 +76,15 @@ public interface LevelTwoDAO {
 	int updateState(@Param("id") int id,@Param("state")int state);
 	
 	
+	/**
+	 * 更新ISMP个体
+	 * @TODO TODO
+	 * @Time 2018年1月9日 下午3:56:46
+	 * @author WEQ
+	 * @return int
+	 */
+	int updateISMP(Map<String,Object> map);
+	
+	
 	
 }

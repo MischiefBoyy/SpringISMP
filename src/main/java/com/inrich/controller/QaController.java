@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.alibaba.fastjson.JSON;
 import com.inrich.dao.LevelTwoDAO;
 import com.inrich.model.LevelTwo;
 import com.inrich.service.QaService;
@@ -101,6 +102,16 @@ public class QaController {
 	@RequestMapping("/getTableTree")
 	public String getTableTree() {
 		return qaService.getTable();
+	}
+	
+	
+	@RequestMapping(path= {"/editIsmp"},method= {RequestMethod.POST})
+	public String editIsmp(HttpServletRequest request,MultipartFile file ) {
+		String data=request.getParameter("data");
+		
+		qaService.editISMP(JSON.parseObject(data,Map.class), file);
+		
+		return null;
 	}
 	
 }
