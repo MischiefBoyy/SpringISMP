@@ -97,4 +97,10 @@ public class QaController {
 		return result>0?OutPrintUtil.getJSONString("success", "删除成功！"):OutPrintUtil.getJSONString("error", "删除失败！"); 
 	}
 	
+	
+	@RequestMapping("/getTableTree")
+	public String getTableTree() {
+		return qaService.getTable();
+	}
+	
 }

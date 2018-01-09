@@ -430,11 +430,8 @@ public class QaService {
 			
 		}
 		
-		System.out.println(JSON.toJSONString(infos));
 		
-		
-		
-		return null;
+		return JSON.toJSONString(infos);
 	}
 	
 	
