@@ -35,7 +35,7 @@
 	<select id="selectIndex" resultType="LevelTwo">
 		select * from 
 		<include refid="table"/>
-		where parent_id=0
+		where parent_id=0 and state=0
 	</select>
 	
 	<insert id="addLevelTwo" parameterType="LevelTwo" useGeneratedKeys="true" keyProperty="id">
@@ -48,7 +48,7 @@
 	<select id="selectByKeyword" resultType="LevelTwo">
 		select * from 
 		<include refid="table"/>
-		where key_word=#{selectByKeyword}
+		where key_word=#{selectByKeyword} and state=0
 	</select>
 	
 	
@@ -60,9 +60,13 @@
 	
 	<select id="selectTableJson" resultType="map">
 		select id,question,parent_id as parentId,is_base as isBase from 
-			<include refid="table"/> order by id asc
+			<include refid="table"/> where state=0 order by id asc
 	</select>
 	
+	
+	<update id="updateState">
+		update <include refid="table"/> set state=#{state} where id=#{id} or parent_id=#{id}
+	</update>
 	
 	
 	

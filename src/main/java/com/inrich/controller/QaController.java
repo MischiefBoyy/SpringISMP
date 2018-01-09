@@ -35,7 +35,10 @@ public class QaController {
 	
 	
 	@RequestMapping("/click")
-	public String click(@RequestParam("id") int id,@RequestParam("isBase") int isBase) {
+	public String click(@RequestParam("id") int id,@RequestParam(value="isBase",defaultValue="999") int isBase ) {
+		if(isBase == 999) {
+			return OutPrintUtil.getJSONString("success", levelTwoDAO.selectLevelTwoById(id)); 
+		}
 		return qaService.getByClick(id, isBase);
 	}
 	
@@ -87,4 +90,11 @@ public class QaController {
 		List<Map<String,Object>> list=levelTwoDAO.selectNotBase();
 		return OutPrintUtil.getJSONString("success", list); 
 	}
+	
+	@RequestMapping("/delete")
+	public String delete(@RequestParam("id") int id) {
+		int result=qaService.delete(id);
+		return result>0?OutPrintUtil.getJSONString("success", "删除成功！"):OutPrintUtil.getJSONString("error", "删除失败！"); 
+	}
+	
 }

@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -336,6 +337,7 @@ public class QaService {
 	 * @author WEQ
 	 * @return String
 	 */
+	@Transactional
 	public String addTypeAnswer(String[] questions,String[] answers, String[] keyWords,LevelTwo parentModel) {
 		LevelTwo addInfo = null;
 		for(int i=0;i<questions.length;i++) {
@@ -425,9 +427,10 @@ public class QaService {
 		
 		for(TabModel aModel: infos) {
 			aModel.setChildren(getChild(aModel.getId(),tabList));
+			
 		}
 		
-		
+		System.out.println(JSON.toJSONString(infos));
 		
 		
 		
@@ -462,6 +465,11 @@ public class QaService {
 	    return childList;
 		
 		
+	}
+	
+	@Transactional
+	public int delete(int id) {
+		return levelTwoDAO.updateState(id, 1);
 	}
 	
 	

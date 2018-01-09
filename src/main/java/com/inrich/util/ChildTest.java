@@ -204,5 +204,17 @@ public class ChildTest {
 		System.out.println("-------------SUCCESS");
 		
 	}
+	
+	
+	@Test
+	public void testGetTab() {
+		qaService.getTable();
+	}
+	
+	@Test
+	public void testUpdateState() {
+		qaService.delete(49);
+	}
+
 
 }
