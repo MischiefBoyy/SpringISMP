@@ -93,7 +93,7 @@
 											Formdata1.delete("question");
 											var Fdata = {"question":$("#Fquestion").val(),"id":node.id}
 											console.log(Fdata)
-											Formdata1.append("data",Fdata)
+											Formdata1.append("data",JSON.stringify(Fdata))
 											console.log(Formdata1.get("data"))
 											$.ajax({
 												url: window.PRJ_ROOT+"/editIsmp",  

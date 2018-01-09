@@ -469,21 +469,29 @@ public class QaService {
 		return levelTwoDAO.updateState(id, 1);
 	}
 	
-	
+	@Transactional
 	public String editISMP(Map<String,Object> map,MultipartFile file) {
 		
-		if(file != null) {
-			//做保存图片的操作
-			map.put("image_path", "aaaaaaaaaaa");
-			
+		
+		
+		
+		try {
+			if(file != null) {
+				//做保存图片的操作
+				int dotPos = file.getOriginalFilename().lastIndexOf(".");
+				String fileExt = file.getOriginalFilename().substring(dotPos + 1).toLowerCase();
+				String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "."+fileExt;
+				Files.copy(file.getInputStream(), new File(pathProperties.getImages() + fileName).toPath());
+				map.put("image_path", "aaaaaaaaaaa");
+			}
+			levelTwoDAO.updateISMP(map);
+		} catch (IOException e) {
+			logger.error("修改ISMP:"+e.getMessage());
+			throw new RuntimeException("保存数据出现为题，回滚!");
 			
 		}
 		
-		System.out.println(JSON.toJSONString(map));
-		
-		levelTwoDAO.updateISMP(map);
-		
-		return "aa";
+		 return OutPrintUtil.getJSONString("success", "修改成功！");
 	}
 	
 	
