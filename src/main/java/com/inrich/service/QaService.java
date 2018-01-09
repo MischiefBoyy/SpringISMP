@@ -471,12 +471,9 @@ public class QaService {
 	
 	@Transactional
 	public String editISMP(Map<String,Object> map,MultipartFile file) {
-		
-		
-		
-		
 		try {
-			if(file != null) {
+			if(file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
+				System.out.println("-----修改图片");
 				//做保存图片的操作
 				int dotPos = file.getOriginalFilename().lastIndexOf(".");
 				String fileExt = file.getOriginalFilename().substring(dotPos + 1).toLowerCase();

@@ -108,7 +108,6 @@ public class QaController {
 	@RequestMapping(path= {"/editIsmp"},method= {RequestMethod.POST})
 	public String editIsmp(HttpServletRequest request,MultipartFile file ) {
 		String data=request.getParameter("data");
-		System.out.println("---------:"+data);
 		return qaService.editISMP(JSON.parseObject(data,Map.class), file);
 	}
 	
