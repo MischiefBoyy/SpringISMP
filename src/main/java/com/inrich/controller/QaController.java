@@ -1,6 +1,5 @@
 package com.inrich.controller;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +54,6 @@ public class QaController {
 		List<MultipartFile> files=null;
 		String []keyWords=null;
 		files = ((MultipartHttpServletRequest) request).getFiles("file");
-		System.out.println("---------"+files.size());
 		LevelTwo parentModel=levelTwoDAO.selectLevelTwoById(id);
 		String []questions=request.getParameterValues("question");
 		if(!files.isEmpty()) {
@@ -94,7 +92,7 @@ public class QaController {
 	
 	@RequestMapping("/delete")
 	public String delete(@RequestParam("id") int id) {
-		int result=qaService.delete(id);
+		int result = qaService.delete(id);
 		return result>0?OutPrintUtil.getJSONString("success", "删除成功！"):OutPrintUtil.getJSONString("error", "删除失败！"); 
 	}
 	
