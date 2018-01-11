@@ -73,10 +73,10 @@
 	<update id="updateISMP" parameterType="java.util.Map">
 		update <include refid="table"/>
 			<set>
-          	 <if test="key_word!= null">key_word!=  #{key_word},</if> 
+          	 <if test="key_word!= null">key_word=  #{key_word},</if> 
              <if test="is_base != null">is_base = #{is_base},</if> 
              <if test="is_qa != null">is_qa = #{is_qa},</if> 
-             <if test="answer != null">answer!=  #{answer},</if> 
+             <if test="answer != null">answer=  #{answer},</if> 
              <if test="question != null">question = #{question},</if> 
              <if test="image_path != null">image_path = #{image_path},</if> 
         </set>  where id=#{id}
