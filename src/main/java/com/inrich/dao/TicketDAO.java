@@ -12,7 +12,7 @@ import com.inrich.model.LoginTicket;
 @Mapper
 public interface TicketDAO {
 	
-	String TABLE_NAME = "login_ticket";
+	String TABLE_NAME = "ticket";
     String INSERT_FIELDS = " user_id, expired, status, ticket ";
     String SELECT_FIELDS = " id, " + INSERT_FIELDS;
     

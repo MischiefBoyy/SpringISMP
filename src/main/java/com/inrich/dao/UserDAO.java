@@ -11,10 +11,10 @@ import com.inrich.model.User;
 public interface UserDAO {
 	
 	String TABLE_NAME = "user";
-    String INSET_FIELDS = " name, password, salt, head_url ";
-    String SELECT_FIELDS = " id, name, password, salt, head_url";
+    String INSET_FIELDS = " name, password ";
+    String SELECT_FIELDS = " id, name, password ";
     
-    @Insert({"insert into ",TABLE_NAME, " (",INSET_FIELDS,") values (#{name},#{password},#{salt},#{headUrl})"})
+    @Insert({"insert into ",TABLE_NAME, " (",INSET_FIELDS,") values (#{name},#{password})"})
     int addUser(User user);
     
     
