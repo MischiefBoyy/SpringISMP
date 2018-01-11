@@ -1,6 +1,5 @@
 package com.inrich.controller;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +19,7 @@ import com.inrich.model.LevelTwo;
 import com.inrich.service.QaService;
 import com.inrich.util.OutPrintUtil;
 
-@RestController
+@RestController()
 public class QaController {
 	@Autowired
 	 QaService qaService;
@@ -48,7 +47,7 @@ public class QaController {
 		return qaService.doText(text);
 	}
 	
-	@RequestMapping(path= {"/addIsmp"},method= {RequestMethod.POST})
+	@RequestMapping(path= {"/admin/addIsmp"},method= {RequestMethod.POST})
 	public String addIsmp(HttpServletRequest request,@RequestParam(value="id",defaultValue="-1")  int id ) {
 		System.out.println("-----id:"+id);
 		String result=null;
@@ -86,29 +85,31 @@ public class QaController {
 		return result;
 	}
 	
-	@RequestMapping("/getParent")
+	@RequestMapping("/admin/getParent")
 	public String getParent() {
 		List<Map<String,Object>> list=levelTwoDAO.selectNotBase();
 		return OutPrintUtil.getJSONString("success", list); 
 	}
 	
-	@RequestMapping("/delete")
+	@RequestMapping("/admin/delete")
 	public String delete(@RequestParam("id") int id) {
 		int result=qaService.delete(id);
 		return result>0?OutPrintUtil.getJSONString("success", "删除成功！"):OutPrintUtil.getJSONString("error", "删除失败！"); 
 	}
 	
 	
-	@RequestMapping("/getTableTree")
+	@RequestMapping("/admin/getTableTree")
 	public String getTableTree() {
 		return qaService.getTable();
 	}
 	
 	
-	@RequestMapping(path= {"/editIsmp"},method= {RequestMethod.POST})
+	@RequestMapping(path= {"/admin/editIsmp"},method= {RequestMethod.POST})
 	public String editIsmp(HttpServletRequest request,MultipartFile file ) {
 		String data=request.getParameter("data");
 		return qaService.editISMP(JSON.parseObject(data,Map.class), file);
 	}
+	
+	
 	
 }

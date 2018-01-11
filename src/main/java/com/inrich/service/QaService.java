@@ -23,6 +23,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.junit.runner.notification.RunNotifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,8 @@ public class QaService {
 	public String getByClick(int id, int isBase) {
 		Map<String, Object> map = new HashMap<>(3);
 		LevelTwo currentInfo = levelTwoDAO.selectLevelTwoById(id);
+		//查询量增加1
+		levelTwoDAO.addClickNum(id);
 		if (isBase == 0) {
 			map.put("info", levelTwoDAO.selectLevelTwoByPid(id));
 			map.put("isBase", false);// 为了前台判断是否添加可点击样式，false为添加，true为不添加
@@ -107,6 +110,8 @@ public class QaService {
 			}
 			LevelTwo levelTwo = levelTwoDAO.selectByKeyword(keyWord);
 			if (levelTwo != null) {
+				//查询量增加1
+				levelTwoDAO.addClickNum(levelTwo.getId());
 				Map<String, Object> map = new HashMap<>(2);
 				if (levelTwo.getIsBase() == 0) {
 					List<Map<String, Object>> list = levelTwoDAO.selectLevelTwoByPid(levelTwo.getId());
@@ -304,6 +309,7 @@ public class QaService {
 	 * @author WEQ
 	 * @return String
 	 */
+	@Transactional
 	public String addTypeQuestion(String[] questions,String[]isQas,String[] keyWords,LevelTwo parentModel) {
 		LevelTwo addInfo = null;
 		int parentId=0;
@@ -312,19 +318,23 @@ public class QaService {
 			parentId=parentModel.getId();
 			level=parentModel.getLevel()+1;
 		}
-		
-		for(int i=0;i<questions.length;i++) {
-			addInfo=new LevelTwo();
-			addInfo.setAnswer(null);
-			addInfo.setClickNum(0);
-			addInfo.setIsBase(0);
-			addInfo.setIsQa(Integer.parseInt(isQas[i]));
-			addInfo.setKeyWord(StringUtils.isEmpty(keyWords[i])?null:keyWords[i]);
-			addInfo.setLevel(level);
-			addInfo.setParentId(parentId);
-			addInfo.setQuestion(questions[i]);
-			addInfo.setImagePath(null);
-			levelTwoDAO.addLevelTwo(addInfo);
+		try {
+			for(int i=0;i<questions.length;i++) {
+				addInfo=new LevelTwo();
+				addInfo.setAnswer(null);
+				addInfo.setClickNum(0);
+				addInfo.setIsBase(0);
+				addInfo.setIsQa(Integer.parseInt(isQas[i]));
+				addInfo.setKeyWord(StringUtils.isEmpty(keyWords[i])?null:keyWords[i]);
+				addInfo.setLevel(level);
+				addInfo.setParentId(parentId);
+				addInfo.setQuestion(questions[i]);
+				addInfo.setImagePath(null);
+				levelTwoDAO.addLevelTwo(addInfo);
+			}
+		} catch (Exception e) {
+			logger.error("添加问题类型出现错误:"+e.getMessage());
+			throw new RuntimeException("添加问题类型出现错误");
 		}
 		return OutPrintUtil.getJSONString("success", "保存成功");
 	}
@@ -340,18 +350,23 @@ public class QaService {
 	@Transactional
 	public String addTypeAnswer(String[] questions,String[] answers, String[] keyWords,LevelTwo parentModel) {
 		LevelTwo addInfo = null;
-		for(int i=0;i<questions.length;i++) {
-			addInfo=new LevelTwo();
-			addInfo.setAnswer(answers[i]);
-			addInfo.setClickNum(0);
-			addInfo.setIsBase(1);
-			addInfo.setIsQa(0);
-			addInfo.setKeyWord(StringUtils.isEmpty(keyWords[i])?null:keyWords[i]);
-			addInfo.setLevel(parentModel.getLevel() + 1);
-			addInfo.setParentId(parentModel.getId());
-			addInfo.setQuestion(questions[i]);
-			addInfo.setImagePath(null);
-			levelTwoDAO.addLevelTwo(addInfo);
+		try {
+			for(int i=0;i<questions.length;i++) {
+				addInfo=new LevelTwo();
+				addInfo.setAnswer(answers[i]);
+				addInfo.setClickNum(0);
+				addInfo.setIsBase(1);
+				addInfo.setIsQa(0);
+				addInfo.setKeyWord(StringUtils.isEmpty(keyWords[i])?null:keyWords[i]);
+				addInfo.setLevel(parentModel.getLevel() + 1);
+				addInfo.setParentId(parentModel.getId());
+				addInfo.setQuestion(questions[i]);
+				addInfo.setImagePath(null);
+				levelTwoDAO.addLevelTwo(addInfo);
+			}
+		} catch (Exception e) {
+			logger.error("添加回答类型出现错误:"+e.getMessage());
+			throw new RuntimeException("添加回答类型出现错误");
 		}
 		return OutPrintUtil.getJSONString("success", "保存成功");
 	}
@@ -364,6 +379,7 @@ public class QaService {
 	 * @author WEQ
 	 * @return String
 	 */
+	@Transactional
 	public String addTypeImage(List<MultipartFile> files, String[] questions, LevelTwo parentModel) {
 		
 		LevelTwo addInfo = null;
@@ -383,7 +399,7 @@ public class QaService {
 					Files.copy(files.get(i).getInputStream(), new File(pathProperties.getImages() + fileName).toPath());
 				} catch (IOException e) {
 					logger.error("保存图片出现问题:" + e.getMessage());
-					return OutPrintUtil.getJSONString("error", "保存图片错误。");
+					throw new RuntimeException("保存图片错误。");
 				}
 			}
 			addInfo = new LevelTwo();
@@ -483,13 +499,15 @@ public class QaService {
 			}
 			levelTwoDAO.updateISMP(map);
 		} catch (IOException e) {
-			logger.error("修改ISMP:"+e.getMessage());
+			logger.error("修改ISMP错误:"+e.getMessage());
 			throw new RuntimeException("保存数据出现为题，回滚!");
 			
 		}
 		
 		 return OutPrintUtil.getJSONString("success", "修改成功！");
 	}
+	
+	
 	
 	
 	

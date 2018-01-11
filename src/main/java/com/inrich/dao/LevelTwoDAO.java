@@ -84,7 +84,16 @@ public interface LevelTwoDAO {
 	 * @return int
 	 */
 	int updateISMP(Map<String,Object> map);
+
 	
+	/**
+	 * 更新点击量+1
+	 * @TODO TODO
+	 * @Time 2018年1月11日 下午1:37:38
+	 * @author WEQ
+	 * @return int
+	 */
+	int addClickNum(int id);
 	
 	
 }
