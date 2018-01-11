@@ -2,7 +2,7 @@ layui.use("element",function(){
 			var $= layui.$;var form = layui.form;
 			$.ajax({
 				type:"get",
-				url:window.PRJ_ROOT+"/getTableTree",
+				url:window.PRJ_ROOT+"/admin/getTableTree",
 				async:true,
 				success:function(res){
 					var data = JSON.parse(res);
@@ -133,7 +133,7 @@ layui.use("element",function(){
 									          btn.find('.layui-layer-btn0').click(function(){
 									          	$.ajax({
 									          		type:"post",
-									          		url:window.PRJ_ROOT+"/delete",
+									          		url:window.PRJ_ROOT+"/admin/delete",
 									          		async:true,
 									          		data:{"id":res.data.id},
 									          		success:function(res){
@@ -170,7 +170,7 @@ layui.use("element",function(){
 function Cajax(Formdata1){
 									
 		$.ajax({
-			url: window.PRJ_ROOT+"/editIsmp",  
+			url: window.PRJ_ROOT+"/admin/editIsmp",  
 	        type: 'POST',  
 	        data: Formdata1, 
 	        cache: false,  

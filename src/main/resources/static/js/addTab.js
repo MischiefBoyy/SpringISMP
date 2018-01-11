@@ -2,7 +2,7 @@ layui.use("element",function(){
 			var $= layui.$,form=layui.form,layer=layui.layer;
 			$.ajax({
 				type:"get",
-				url:window.PRJ_ROOT+"/getParent",
+				url:window.PRJ_ROOT+"/admin/getParent",
 				async:true,
 				success:function(res){
 					console.log(JSON.parse(res))
@@ -107,7 +107,7 @@ layui.use("element",function(){
 					Formdata1.delete("modules")
 				}
 				$.ajax({  
-			            url: window.PRJ_ROOT+"/addIsmp",  
+			            url: window.PRJ_ROOT+"/admin/addIsmp",  
 			            type: 'POST',  
 			            data: Formdata1, 
 			            cache: false,  

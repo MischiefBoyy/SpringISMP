@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>ISMP节点管理系统</title>
+	<link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+	<link rel="stylesheet" type="text/css" href="css/login.css"/>
+	<!-- #FAVICONS -->
+	<link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+</head>
+
+
+<body>
+<div class="login">
+     <h1>ISMP节点管理系统</h1>
+     <p></p>
+    <form class="layui-form"  method="post" id="login">
+        <div class="layui-form-item">
+            <input type="text" name="loginName" id="loginName" lay-verify="required" placeholder="请输入账号" autocomplete="off" value="" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+                <input type="password" name="passwd" id="passwd" lay-verify="required" placeholder="请输入密码" autocomplete="off" value="" class="layui-input">
+        </div>
+        <a class="layui-btn login_btn" type="button" >登陆系统</a>
+    </form>
+</div>
+		<script type="text/javascript" src="layui/layui.all.js"></script>
+		<script type="text/javascript" src="js/const.js"></script>
+		<script type="text/javascript">
+			layui.use("element",function(){
+				var $=layui.$;
+				$(".login_btn").click(function(){
+					$.ajax({
+						type:"post",
+						url:window.PRJ_ROOT+"/login",
+						async:true,
+						data:{"username":$("#loginName").val(),"password":$("#passwd").val()},
+						dataType:"json",
+						success:function(res){
+							console.log(res)
+//							window.location.href="table.html"
+						},error:function(res){
+							console.log(res)
+						}
+					});
+				})
+			})
+		</script>
+</body>
+</html>
