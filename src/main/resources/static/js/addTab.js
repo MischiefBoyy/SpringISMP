@@ -115,6 +115,10 @@ layui.use("element",function(){
 			            contentType: false,
 			            success:function(res){
 			            	layer.msg(JSON.parse(res).msg)
+			            	setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
+			            		parent.layer.closeAll()
+							   parent.window.location.reload();//页面刷新
+							},1000);
 			            }
 			        })
 			})
