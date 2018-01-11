@@ -5,6 +5,7 @@ layui.use("element",function(){
 				url:window.PRJ_ROOT+"/admin/getTableTree",
 				async:true,
 				success:function(res){
+					console.log(res)
 					var data = JSON.parse(res);
 					var dataId;
 					layui.tree({
