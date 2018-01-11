@@ -10,10 +10,14 @@
 			#table1{width: 50%;position: absolute;right: 30px;top:100px;}
 			#table2{width: 50%;position: absolute;right: 30px;top:200px;}
 			#table thead th{text-align: center;}
-			#table tbody td:nth-last-of-type(1),#table tbody td:nth-last-of-type(2){text-align: center;}
+			#table tbody td:nth-last-of-type(1),#table tbody td:nth-last-of-type(2){text-align: 
+
+center;}
 			#tform{position: relative;width: 600px;height: auto;display: none;padding: 20px 0 50px;}
 			#sbtn{position: absolute;left: 50%;bottom: 0;margin-left: -46px;}
-			.picbox{width: 480px;height: auto;border: 1px solid #DDDDDD;text-align: center;padding: 8px 0;}
+			.picbox{width: 480px;height: auto;border: 1px solid #DDDDDD;text-align: center;padding: 
+
+8px 0;}
 			#newImg{opacity: 0;}
 		</style>
 	</head>
@@ -60,82 +64,170 @@
 					    		success:function(res){
 					    			console.log(res)
 					    			if (res.data.imagePath) {
-					    				$("#table").html('<colgroup><col width="150"><col width="80"><col width="80"><col width="80"></colgroup><thead><tr><th>描述</th><th>图片</th><th>修改</th><th>删除</th></tr></thead><tbody><tr><td>'+res.data.question+'</td><td><img src=images/'+res.data.imagePath+'  layer-src=images/'+res.data.imagePath+'></td><td><button class="layui-btn" id="trevise">修改</button></td><td><button class="layui-btn layui-btn-danger" id="tdel">删除</button></td></tr></tody>')
+					    				$("#table").html('<colgroup><col 
+
+width="150"><col width="80"><col width="80"><col width="80"></colgroup><thead><tr><th>描述</th><th>图片</th><th>
+
+修改</th><th>删除</th></tr></thead><tbody><tr><td>'+res.data.question+'</td><td><img 
+
+src=images/'+res.data.imagePath+'  layer-src=images/'+res.data.imagePath+'></td><td><button class="layui-btn" 
+
+id="trevise">修改</button></td><td><button class="layui-btn layui-btn-danger" id="tdel">删除
+
+</button></td></tr></tody>')
 					    				//form
-					    				$("#tform").html('<div class="layui-form-item"><label class="layui-form-label">描述</label><div class="layui-input-block"><input type="text" name="question" id="Fquestion"  class="layui-input" value='+res.data.question+'></div></div><div class="layui-form-item"><label class="layui-form-label">图片</label><div class="layui-input-block picbox"><img src=images/'+res.data.imagePath+' width="70%" id="timg"><input type="file" id="newImg" name="file"></div></div><button type="button" class="layui-btn layui-btn-normal" id="sbtn">确认修改</button>')
+					    				$("#tform").html('<div class="layui-
+
+form-item"><label class="layui-form-label">描述</label><div class="layui-input-block"><input type="text" 
+
+name="question" id="Fquestion"  class="layui-input" value='+res.data.question+'></div></div><div class="layui-
+
+form-item"><label class="layui-form-label">图片</label><div class="layui-input-block picbox"><img 
+
+src=images/'+res.data.imagePath+' width="70%" id="timg"><input type="file" id="newImg" 
+
+name="file"></div></div><button type="button" class="layui-btn layui-btn-normal" id="sbtn">确认修改</button>')
 					    				//图片点击放大
 					    				layer.photos({
 										  photos: '#table'
-										  ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-										});										
+										  ,anim: 5 //0-6的选择，指定弹出
+
+图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+										});					
+
+					
 										$("#trevise").click(function(){
 											layer.open({
-												title:"修改信息",
+												title:"修改信
+
+息",
 												type: 1,
-												content: $('#tform'),
-												area: ['600px','600px'],
+												content: 
+
+$('#tform'),
+												area: 
+
+['600px','600px'],
 												scrollbar:false
 											})
 										})
 										//form表单图片绑定file
 										$("#timg").click(function(){
-											$("#newImg").trigger("click");
+											$("#newImg").trigger
+
+("click");
 										})
 										//图片预览
-										$("#newImg").on("change",function(){
-											var objUrl = getObjectURL(this.files[0]) ; //获取图片的路径，该路径不是图片在本地的路径
+										$("#newImg").on
+
+("change",function(){
+											var objUrl = 
+
+getObjectURL(this.files[0]) ; //获取图片的路径，该路径不是图片在本地的路径
 											if (objUrl) {
-												$("#timg").attr("src", objUrl) ; //将图片路径存入src中，显示出图片
+												$("#timg").attr
+
+("src", objUrl) ; //将图片路径存入src中，显示出图片
 											}
 										})
 										$("#sbtn").click(function(){
-											var Formdata1 = new FormData($("#tform")[0]);
-											Formdata1.delete("question");
-											var Fdata = {"question":$("#Fquestion").val(),"id":node.id}
-											Formdata1.append("data",JSON.stringify(Fdata))										
+											var Formdata1 = new 
+
+FormData($("#tform")[0]);
+											Formdata1.delete
+
+("question");
+											var Fdata = 
+
+{"question":$("#Fquestion").val(),"id":node.id}
+											Formdata1.append
+
+("data",JSON.stringify(Fdata))										
 											$.ajax({
-												url: window.PRJ_ROOT+"/editIsmp",  
+												url: 
+
+window.PRJ_ROOT+"/editIsmp",  
 									            type: 'POST',  
 									            data: Formdata1, 
 									            cache: false,  
 									            processData: false,  
 									            contentType: false,
 									            success:function(res){
-									            	layer.msg(JSON.parse(res).msg)
+									            	layer.msg(JSON.parse
+
+(res).msg)
 									            }
 											});
 										})
 										
 					    			} else if(res.data.answer){
-					    				$("#table").html('<colgroup><col><col width="150"><col width="300"><col width="80"><col width="80"></colgroup><thead><tr><th>问题</th><th>关键字</th><th>回答</th><th>修改</th><th>删除</th></tr></thead><tbody><tr><td>'+res.data.question+'</td><td>'+res.data.keyWord+'</td><td>'+res.data.answer+'</td><td><button class="layui-btn" id="trevise">修改</button></td><td><button class="layui-btn layui-btn-danger" id="tdel">删除</button></td></tr></tody>')
+					    				$("#table").html('<colgroup><col><col 
+
+width="150"><col width="300"><col width="80"><col width="80"></colgroup><thead><tr><th>问题</th><th>关键字
+
+</th><th>回答</th><th>修改</th><th>删除</th></tr></thead><tbody><tr><td>'+res.data.question
+
++'</td><td>'+res.data.keyWord+'</td><td>'+res.data.answer+'</td><td><button class="layui-btn" id="trevise">修改
+
+</button></td><td><button class="layui-btn layui-btn-danger" id="tdel">删除</button></td></tr></tody>')
 					    				
-					    				$("#tform").html('<div class="layui-form-item"><label class="layui-form-label">问题</label><div class="layui-input-block"><textarea name="question" class="layui-textarea">'+res.data.question+'</textarea></div></div><div class="layui-form-item"><label class="layui-form-label">关键字</label><div class="layui-input-block"><input class="layui-input" id="key_word" value='+res.data.keyWord+'></div></div><div class="layui-form-item"><label class="layui-form-label">回答</label><div class="layui-input-block"><textarea name="answer" class="layui-textarea">'+res.data.answer+'</textarea></div></div><button type="button" class="layui-btn layui-btn-normal" id="sbtn">确认修改</button>')
+					    				$("#tform").html('<div class="layui-
+
+form-item"><label class="layui-form-label">问题</label><div class="layui-input-block"><textarea name="question" 
+
+class="layui-textarea">'+res.data.question+'</textarea></div></div><div class="layui-form-item"><label 
+
+class="layui-form-label">关键字</label><div class="layui-input-block"><input class="layui-input" id="key_word" 
+
+value='+res.data.keyWord+'></div></div><div class="layui-form-item"><label class="layui-form-label">回答
+
+</label><div class="layui-input-block"><textarea name="answer" class="layui-textarea">'+res.data.answer
+
++'</textarea></div></div><button type="button" class="layui-btn layui-btn-normal" id="sbtn">确认修改</button>')
 					    				form.render('')
 					    				
 					    				$("#trevise").click(function(){
 											layer.open({
-												title:"修改信息",
+												title:"修改信
+
+息",
 												type: 1,
-												content: $('#tform'),
-												area: ['600px','600px'],
+												content: 
+
+$('#tform'),
+												area: 
+
+['600px','600px'],
 												scrollbar:false
 											})
 										})
 					    				$("#sbtn").click(function(){
-											var Formdata1 = new FormData();
+											var Formdata1 = new 
+
+FormData();
 											
-											var Fdata = {"question":$("#tform textarea").eq(0).val(),"id":node.id,"answer":$("#tform textarea").eq(1).val(),"key_word":$("#key_word").val()}
+											var Fdata = 
+
+{"question":$("#tform textarea").eq(0).val(),"id":node.id,"answer":$("#tform textarea").eq(1).val(),"key_word":
+
+$("#key_word").val()}
 											console.log(Fdata)
-											Formdata1.append("data",JSON.stringify(Fdata))										
+											Formdata1.append
+
+("data",JSON.stringify(Fdata))										
 											$.ajax({
-												url: window.PRJ_ROOT+"/editIsmp",  
+												url: 
+
+window.PRJ_ROOT+"/editIsmp",  
 									            type: 'POST',  
 									            data: Formdata1, 
 									            cache: false,  
 									            processData: false,  
 									            contentType: false,
 									            success:function(res){
-									            	layer.msg(JSON.parse(res).msg)
+									            	layer.msg(JSON.parse
+
+(res).msg)
 									            }
 											});
 										})
@@ -146,14 +238,26 @@
 					    				}else{
 					    					var Qadata = "是";
 					    				}
-					    				$("#table").html('<colgroup><col><col width="150"><col width="150"><col width="80"><col width="80"></colgroup><thead><tr><th>问题</th><th>关键字</th><th>是否Qa问答</th><th>修改</th><th>删除</th></tr></thead><tbody><tr><td>'+res.data.question+'</td><td>'+res.data.keyWord+'</td><td>'+Qadata+'</td><td><button class="layui-btn" id="trevise">修改</button></td><td><button class="layui-btn layui-btn-danger" id="tdel">删除</button></td></tr></tody>')
+					    				$("#table").html('<colgroup><col><col 
+
+width="150"><col width="150"><col width="80"><col width="80"></colgroup><thead><tr><th>问题</th><th>关键字
+
+</th><th>是否Qa问答</th><th>修改</th><th>删除</th></tr></thead><tbody><tr><td>'+res.data.question
+
++'</td><td>'+res.data.keyWord+'</td><td>'+Qadata+'</td><td><button class="layui-btn" id="trevise">修改
+
+</button></td><td><button class="layui-btn layui-btn-danger" id="tdel">删除</button></td></tr></tody>')
 					    			}
 					    			//删除
 					    			$("#tdel").click(function(){
 					    				if (res.data.isBase==0) {
-					    					var delMsg = "此标题下还有子内容，删除将一并删除，无法撤回"
+					    					var delMsg = "此标题下还有子内容
+
+，删除将一并删除，无法撤回"
 					    				} else{
-					    					var delMsg = "确认删除嘛？删除将无法撤回"
+					    					var delMsg = "确认删除嘛？删除将
+
+无法撤回"
 					    				}
 					    				layer.open({
 									        type: 1
@@ -161,22 +265,40 @@
 									        ,closeBtn: false
 									        ,area: '300px;'
 									        ,shade: 0.8
-									        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+									        ,id: 'LAY_layuipro' //设定一个id
+
+，防止重复弹出
 									        ,btn: ['确认删除', '我再想想']
 									        ,btnAlign: 'c'
 									        ,moveType: 1 //拖拽模式，0或者1
-									        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">'+delMsg+'</div>'
+									        ,content: '<div style="padding: 
+
+50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">'+delMsg+'</div>'
 									        ,success: function(layero){
-									          var btn = layero.find('.layui-layer-btn');
-									          btn.find('.layui-layer-btn0').click(function(){
+									          var btn = layero.find
+
+('.layui-layer-btn');
+									          btn.find('.layui-layer-
+
+btn0').click(function(){
 									          	$.ajax({
 									          		type:"post",
-									          		url:window.PRJ_ROOT+"/delete",
+									          		
+
+url:window.PRJ_ROOT+"/delete",
 									          		async:true,
-									          		data:{"id":res.data.id},
-									          		success:function(res){
-									          			layer.msg(JSON.parse(res).msg)
-									          			window.location.reload()
+									          		data:
+
+{"id":res.data.id},
+									          		
+
+success:function(res){
+									          			
+
+layer.msg(JSON.parse(res).msg)
+									          			
+
+window.location.reload()
 									          		}
 									          	});
 									          });
