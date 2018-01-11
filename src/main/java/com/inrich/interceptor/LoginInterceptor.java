@@ -35,9 +35,12 @@ public class LoginInterceptor implements HandlerInterceptor{
 
 	@Override
 	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse response, Object arg2) throws Exception {
+		System.out.println("-------进入登录验证");
 		if(hostHolder.getUser() == null ) {
-			System.out.println("-------进入登录验证");
+			response.setCharacterEncoding("UTF-8"); 
+			System.out.println("-------未登录");
 			PrintWriter out=response.getWriter();
+			response.setCharacterEncoding("UTF-8"); 
 			out.print(OutPrintUtil.getJSONString("unlogin", "请先登录"));
 			//response.sendRedirect("/SpringISMP/login.html");
 			return false;
