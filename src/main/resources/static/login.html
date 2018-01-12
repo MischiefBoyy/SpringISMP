@@ -32,13 +32,16 @@
 				$(".login_btn").click(function(){
 					$.ajax({
 						type:"post",
-						url:window.PRJ_ROOT+"/login",
+						url:window.PRJ_ROOT+"/login/",
 						async:true,
 						data:{"username":$("#loginName").val(),"password":$("#passwd").val()},
 						dataType:"json",
 						success:function(res){
 							console.log(res)
-//							window.location.href="table.html"
+							if(res.msg=="登录成功"){
+								window.location.href="table.html"
+							}
+							//
 						},error:function(res){
 							console.log(res)
 						}

@@ -7,6 +7,10 @@ layui.use("element",function(){
 				success:function(res){
 					console.log(res)
 					var data = JSON.parse(res);
+					if(data.state=="unlogin"){
+						layer.msg("请先登录")
+						window.location.href="login.html"
+					}
 					var dataId;
 					layui.tree({
 					  elem: '#demo' //传入元素选择器
