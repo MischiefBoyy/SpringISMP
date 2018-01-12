@@ -10,7 +10,7 @@ import com.inrich.interceptor.PassInterceptor;
 
 
 @Component
-public class ToutiaoWebConfiguration extends WebMvcConfigurerAdapter{
+public class IsmpWebConfiguration extends WebMvcConfigurerAdapter{
 	@Autowired
 	private PassInterceptor passInterceptor;
 	@Autowired
