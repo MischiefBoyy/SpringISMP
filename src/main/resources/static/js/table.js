@@ -8,7 +8,7 @@ layui.use("element",function(){
 					console.log(res)
 					var data = JSON.parse(res);
 					if(data.state=="unlogin"){
-						layer.msg("请先登录")
+						alert("请先登录")
 						window.location.href="login.html"
 					}
 					var dataId;
