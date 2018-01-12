@@ -40,6 +40,8 @@
 							console.log(res)
 							if(res.msg=="登录成功"){
 								window.location.href="table.html"
+							}else{
+								layer.msg("登录失败")
 							}
 							//
 						},error:function(res){
