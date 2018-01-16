@@ -1,22 +1,23 @@
-		layui.use('element',function(){
-			var $= layui.$;
-			$("#textarea").focus(function(){
-				$("#send").off().on('click',send1)				
-			})
-			$.ajax({
-				type:"get",
-				url:window.PRJ_ROOT+"/sy",
-				async:true,
-				success:function(res){
-					var data = JSON.parse(res).data;
-					console.log(JSON.parse(res))	
-					appendA(data);
-					
-					listC()
-						
-				}
-			});
-		})
+layui.use('element',function(){
+	var $= layui.$;
+	$("#textarea").focus(function(){
+		$("#send").off().on('click',send1)				
+	})
+	$.ajax({
+		type:"get",
+		url:window.PRJ_ROOT+"/sy",
+		async:true,
+		success:function(res){
+			var data = JSON.parse(res).data;
+			data.add="您好，我是机器人小安。请点击下列问题菜单快速精准的定位，或用一句话简洁的话描述您的问题。例如电脑端邮箱怎么配置，新催收系统浏览器设置等。"
+			console.log(data)	
+			appendA(data);
+
+			listC()
+				
+		}
+	});
+})
 function listC(){
 	$(".list").off("click").on("click",function(){
 		$(".aoe").append('<div class="user layui-clear">'+
@@ -65,6 +66,9 @@ function appendA(data){
 		} else{
 			if (data.isQa==0 ||data.isQa==undefined) {
 				if (data.isBase==false) {
+					if (data.add) {
+						list+="<span>"+data.add+"</span></br>"
+					}
 					for (var i =0;i<data.info.length;i++) {
 						list+="<a class='list'  data-id="+data.info[i]['id']+" data-isBase= "+data.info[i]['isBase']+">"+data.info[i]['question']+"</a></br>"
 					}
