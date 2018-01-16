@@ -9,7 +9,7 @@ layui.use('element',function(){
 		async:true,
 		success:function(res){
 			var data = JSON.parse(res).data;
-			data.add="您好，我是机器人小安。请点击下列问题菜单快速精准的定位，或用一句话简洁的话描述您的问题。例如电脑端邮箱怎么配置，新催收系统浏览器设置等。"
+			data.add="您好，我是机器人客服小安。我可以帮您快速的解决基本问题。</br>您可以点选下列菜单或输入关键字快速 查询。</br>常见问题列表如下</br>"
 			console.log(data)	
 			appendA(data);
 
