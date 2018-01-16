@@ -81,10 +81,7 @@ layui.use(['element','layer','laytpl'],function(){
 			
 		})
 	})
-	layer.photos({
-	  photos: '.QRbox'
-	  ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-	}); 
+	
 	
 })
 function mask(code,href,name){
@@ -98,7 +95,7 @@ function mask(code,href,name){
 			if (href.length==2) {
 				Thtml +="<div class='QRbox layui-col-md6'><img src='"+href[i].src+"' layer-src='"+href[i].src+"' width='100%'/><p style='color:#FFB800'>"+href[i].remark+"</p></div>"
 			} else{
-				Thtml +="<div class='QRbox'><img src='"+href[i].src+"' layer-src='"+href[i].src+"' width='20%'/><p style='color:#FFB800'>"+href[i].remark+"</p></div>"
+				Thtml +="<div class='QRbox'><img src='"+href[i].src+"' layer-src='"+href[i].src+"' width='50%'/><p style='color:#FFB800'>"+href[i].remark+"</p></div>"
 			}	
 		}
 	}
