@@ -1,11 +1,11 @@
 body{overflow-x: hidden;background: #f9f9f9;font-size: 13px;}
-.header{height: 59px; border-bottom: 1px solid #404553;;  background-color: #393D49;position: fixed;top: 0;width: 100%;padding: 0 15%;color: #fff;line-height: 59px;}
+.header{height: 59px; border-bottom: 1px solid #404553; background-color: #009688;position: fixed;top: 0;width: 100%;padding: 0 15%;color: #fff;line-height: 59px;}
 
-.header .layui-nav{float: right;margin-right: 15%;cursor: pointer;}
+.header .layui-nav{float: right;margin-right: 15%;cursor: pointer;background-color: #009688}
 .header .layui-nav .layui-nav-item{margin:0 20px;}
 .logo{text-align: center;padding-top: 120px;}
 .content{background: #f9f9f9;padding: 0px 15%;z-index: 9;}
-.content .layui-form{padding: 30px 30% 15px;}
+.content .layui-form{padding: 100px 30% 5px;}
 .layui-form .layui-input{border-radius: 20px;text-align: center;}
 .content .selectMark{text-align: center;color: #333;}
 #gather{margin: 50px 0;}

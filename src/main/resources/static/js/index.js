@@ -37,6 +37,7 @@ layui.use(['element','layer','laytpl'],function(){
 			console.log(Idata)
 			
 		} else{
+			console.log(data)
 			var getTpl = demo.innerHTML
 			,view = document.getElementById('gather');
 			laytpl(getTpl).render(data, function(html){
@@ -84,13 +85,13 @@ layui.use(['element','layer','laytpl'],function(){
 	
 	
 })
-function mask(code,href,name){
+function mask(system,href,name){
 	var Thtml="";
-	if (code==2) {
+	if (system=="B/S") {
 		Thtml = "<a class='layui-btn layui-btn-lg' style='margin-top:35px' target='_blank' href="+href+">点击访问</a>"
-	} else if (code==3 ||code==4) {
+	} else if (system=="C/S") {
 		Thtml = "<a class='layui-btn layui-btn-lg layui-btn-normal'  style='margin-top:35px' href="+href+" download="+name+">下载客户端</a>"
-	}else if (code==5) {
+	}else if (system=="移动端") {
 		for (var i =0;i<href.length;i++) {
 			if (href.length==2) {
 				Thtml +="<div class='QRbox layui-col-md6'><img src='"+href[i].src+"' layer-src='"+href[i].src+"' width='100%'/><p style='color:#FFB800'>"+href[i].remark+"</p></div>"
