@@ -92,7 +92,7 @@ layui.use("element",function(){
 					    				
 					    				$("#sbtn").click(function(){
 											var Formdata1 = new FormData();
-											if ($("Tclose").is(':checked')) {
+											if ($("#Tclose").is(':checked')) {
 												var isq = 1;
 											} else{
 												var isq = 0;
