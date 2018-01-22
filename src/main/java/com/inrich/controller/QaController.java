@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +23,8 @@ import com.inrich.util.OutPrintUtil;
 
 @RestController()
 public class QaController {
+	
+	public static Logger logger = LoggerFactory.getLogger(QaController.class);
 	@Autowired
 	 QaService qaService;
 	@Autowired
@@ -49,16 +53,15 @@ public class QaController {
 	
 	@RequestMapping(path= {"/admin/addIsmp"},method= {RequestMethod.POST})
 	public String addIsmp(HttpServletRequest request,@RequestParam(value="id",defaultValue="-1")  int id ) {
-		System.out.println("-----id:"+id);
+		//System.out.println("-----id:"+id);
 		String result=null;
 		List<MultipartFile> files=null;
 		String []keyWords=null;
 		files = ((MultipartHttpServletRequest) request).getFiles("file");
-		System.out.println("---------"+files.size());
 		LevelTwo parentModel=levelTwoDAO.selectLevelTwoById(id);
 		String []questions=request.getParameterValues("question");
 		if(!files.isEmpty()) {
-			System.out.println("------进入添加图片");
+			//System.out.println("------进入添加图片");
 			if(parentModel == null || parentModel.getIsQa()!=1) {
 				return OutPrintUtil.getJSONString("error", "父类型不是问答！"); 
 			}
@@ -69,7 +72,7 @@ public class QaController {
 		keyWords=request.getParameterValues("keyWord");
 		//System.out.println("keyWords:"+Arrays.toString(keyWords));
 		if(request.getParameterValues("answer") != null) {
-			System.out.println("------进入添加回答");
+			//System.out.println("------进入添加回答");
 			String []answers=request.getParameterValues("answer");
 			if(parentModel == null) {
 				return OutPrintUtil.getJSONString("error", "基类问答，父类不能为空。");
@@ -78,7 +81,7 @@ public class QaController {
 			return result;
 		}
 		
-		System.out.println("------进入添加问题");
+		//System.out.println("------进入添加问题");
 		String []isQas=request.getParameterValues("isQa");
 		result=qaService.addTypeQuestion(questions, isQas, keyWords,parentModel);
 		
@@ -109,6 +112,9 @@ public class QaController {
 		String data=request.getParameter("data");
 		return qaService.editISMP(JSON.parseObject(data,Map.class), file);
 	}
+	
+	
+	
 	
 	
 	

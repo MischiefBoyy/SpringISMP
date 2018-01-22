@@ -23,7 +23,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.junit.runner.notification.RunNotifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -288,7 +287,7 @@ public class QaService {
 		if (!(rc == 0)) {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
 			String dateSimple = dateFormat.format(new Date());
-			String content = dateSimple + "\t\t问题: " + jsonObject.getString("text");
+			String content = dateSimple + "\t\t问题: " + jsonObject.getString("text")+"\n";
 			FileOperation.contentAddTxt(pathProperties.getErrorTxt(), content);
 			return null;
 		}
